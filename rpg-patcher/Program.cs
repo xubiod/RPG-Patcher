@@ -58,6 +58,9 @@ namespace rpg_patcher
                     new MenuItem ("_Copy game files from project directory", "", () => {
                         Functions.Export.CopyGameFiles();
                     }),
+                    new MenuItem ("_List files in the archive", "", () => {
+                        Functions.Export.GetAllFiles();
+                    }),
                     new MenuItem ("_Export everything", "", () => {
                         Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles()));
                     }),
