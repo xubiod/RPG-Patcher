@@ -81,6 +81,8 @@ namespace rpg_patcher
             public static void RefreshColors()
             {
                 _window.ColorScheme = Colors.Base;
+
+                if (_window.Subviews.First().Subviews.Count != 0) _window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString").ColorScheme = Program.HighlighedLabel;
             }
 
             static List<View> _contents = new List<View>()
@@ -100,7 +102,8 @@ namespace rpg_patcher
                 {
                     X = Pos.At(2),
                     Y = Pos.At(4),
-                    Id = "ProjectString"
+                    Id = "ProjectString",
+                    ColorScheme = Program.HighlighedLabel
                 },
                 new Label("Here's some of the more common actions you can do:")
                 {

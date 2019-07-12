@@ -93,6 +93,9 @@ namespace rpg_patcher
             Application.Run();
         }
 
+        public static ColorScheme ArchivedList;
+        public static ColorScheme HighlighedLabel;
+
         public static void Mode(int mode)
         {
             switch (mode)
@@ -122,6 +125,19 @@ namespace rpg_patcher
                             HotNormal = TGAttribute.Make(Color.Blue, Color.White),
                             HotFocus = TGAttribute.Make(Color.BrighCyan, Color.Blue)
                         };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Blue),
+                            Focus = TGAttribute.Make(Color.White, Color.BrightBlue),
+                            HotNormal = TGAttribute.Make(Color.White, Color.Blue),
+                            HotFocus = TGAttribute.Make(Color.White, Color.BrightBlue)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
                         break;
                     }
 
@@ -150,6 +166,19 @@ namespace rpg_patcher
                             Focus = TGAttribute.Make(Color.White, Color.Brown),
                             HotNormal = TGAttribute.Make(Color.Brown, Color.White),
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Brown)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Brown),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
+                            HotNormal = TGAttribute.Make(Color.White, Color.Brown),
+                            HotFocus = TGAttribute.Make(Color.Black, Color.BrightYellow)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightBlue, Color.Gray)
                         };
                         break;
                     }

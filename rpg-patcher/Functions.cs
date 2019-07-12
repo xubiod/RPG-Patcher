@@ -52,13 +52,7 @@ namespace rpg_patcher
                 #endregion
 
                 #region file info
-                Export.AllFiles.ColorScheme = new ColorScheme()
-                {
-                    Normal = TGAttribute.Make(Color.White, Color.Blue),
-                    Focus = TGAttribute.Make(Color.White, Color.BrightBlue),
-                    HotNormal = TGAttribute.Make(Color.White, Color.Blue),
-                    HotFocus = TGAttribute.Make(Color.White, Color.BrightBlue)
-                };
+                Export.AllFiles.ColorScheme = Program.ArchivedList;
 
                 Export.AllFiles.Width = Dim.Percent(80);
                 Export.AllFiles.Height = Dim.Percent(80);
@@ -275,6 +269,7 @@ namespace rpg_patcher
 
                 infoLabel.Text = infoText;
 
+                AllFiles.ColorScheme = Program.ArchivedList;
                 Application.Run(AllFiles);
             }
 
