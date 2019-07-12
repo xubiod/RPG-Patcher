@@ -96,49 +96,65 @@ namespace rpg_patcher
                     X = Pos.At(16),
                     Y = Pos.At(2)
                 },
-                new Label("----------------")
-                {
-                    X = Pos.At(2),
-                    Y = Pos.At(4)
-                },
                 new Label("Project: No project loaded.\nVersion: N/A")
                 {
                     X = Pos.At(2),
-                    Y = Pos.At(5),
+                    Y = Pos.At(4),
                     Id = "ProjectString"
+                },
+                new Label("Here's some of the more common actions you can do:")
+                {
+                    X = Pos.At(2),
+                    Y = Pos.At(7)
                 },
                 new Button("Show Info", true)
                 {
-                    X = Pos.At(2),
-                    Y = Pos.At(8),
+                    X = Pos.At(3),
+                    Y = Pos.At(9),
                     Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.GetAllFiles())
                 },
                 new Label("Lists infromation about the archive.")
                 {
-                    X = Pos.At(21),
-                    Y = Pos.At(8)
+                    X = Pos.At(23),
+                    Y = Pos.At(9)
+                },
+                new Button("Copy Files", true)
+                {
+                    X = Pos.At(3),
+                    Y = Pos.At(11),
+                    Clicked = () => Functions.Export.CopyGameFiles()
+                },
+                new Label("Copies game files. Use as backup or \"deeper\" modding.")
+                {
+                    X = Pos.At(23),
+                    Y = Pos.At(11)
                 },
                 new Button("Extract All", true)
                 {
-                    X = Pos.At(2),
-                    Y = Pos.At(10),
+                    X = Pos.At(3),
+                    Y = Pos.At(13),
                     Clicked = () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles()))
                 },
                 new Label("Extracts all encrypted files from the project.")
                 {
-                    X = Pos.At(21),
-                    Y = Pos.At(10)
+                    X = Pos.At(23),
+                    Y = Pos.At(13)
                 },
                 new Button("Make Project", true)
                 {
-                    X = Pos.At(2),
-                    Y = Pos.At(12),
+                    X = Pos.At(3),
+                    Y = Pos.At(15),
                     Clicked = () => { Functions.Project.MakeProject(); }
                 },
                 new Label("Makes a project file in the loaded project's version.")
                 {
-                    X = Pos.At(21),
-                    Y = Pos.At(12)
+                    X = Pos.At(23),
+                    Y = Pos.At(15)
+                },
+                new Label("You can do more or multiple actions at once via the menu bar. Press Alt\nand the beginning letter of the item to open it.")
+                {
+                    X = Pos.At(2),
+                    Y = Pos.At(18)
                 }
             };
         }
