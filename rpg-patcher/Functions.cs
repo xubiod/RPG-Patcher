@@ -113,7 +113,7 @@ namespace rpg_patcher
             public static void ExecuteIfProjectSelected(Action callback)
             {
                 try {
-                    if (GetVersion(Program.ProjectPath) != "")
+                    if ((Program.ProjectPath ?? "") != "")
                     {
                         callback();
                     }
@@ -361,6 +361,66 @@ namespace rpg_patcher
 
                 if (!ignoreComplete) Application.Run(Operation.Complete);
             }
+
+            public static void FindAndExportFile(bool ignoreComplete = false)
+            {
+                string path = Program.ProjectPath;
+                string where = Functions.FileDialog._SaveDialog.DirectoryPath.ToString();
+                string file = StaticWindows.ExportOneFile.GetFile();
+
+                //WaitDialog.Width = 15;
+                //WaitDialog.Height = 3;
+
+                RPGMakerVersion _version = RGSSAD.GetVersion(path);
+
+                switch (_version)
+                {
+                    case RPGMakerVersion.Xp:
+                    case RPGMakerVersion.Vx:
+                        {
+                            RGSSADv1 encrypted = new RGSSADv1(path);
+                            try
+                            {
+                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name == file);
+
+                                if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
+                                {
+                                    encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
+                                }
+
+                                if (!ignoreComplete) Application.Run(Operation.Complete);
+                            }
+                            catch (IOException fileErr)
+                            {
+                                Operation.ShowError(fileErr.Message);
+                            }
+                            encrypted.Dispose();
+                            break;
+                        }
+                    case RPGMakerVersion.VxAce:
+                        {
+                            RGSSADv3 encrypted = new RGSSADv3(path);
+                            try
+                            {
+                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name == file);
+
+                                if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
+                                {
+                                    encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
+                                }
+
+                                if (!ignoreComplete) Application.Run(Operation.Complete);
+                            }
+                            catch (IOException fileErr)
+                            {
+                                Operation.ShowError(fileErr.Message);
+                            }
+                            encrypted.Dispose();
+                            break;
+                        }
+                    default: break;
+                }
+            }
         }
 
         public static class FileDialog
@@ -381,6 +441,7 @@ namespace rpg_patcher
                 _OpenDialog.AddButton(new Button("Set Dir...") { Clicked = () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } } });
 
                 (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Open") as Button).Clicked += callback;
+                (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.SetFocus(StaticWindows.Main._window);
 
                 Application.Run(_OpenDialog);
             }
@@ -397,6 +458,7 @@ namespace rpg_patcher
                 _SaveDialog.AddButton(new Button("Set Dir...") { Clicked = () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } } });
 
                 (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += callback;
+                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.SetFocus(StaticWindows.Main._window);
 
                 Application.Run(_SaveDialog);
             }

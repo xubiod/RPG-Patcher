@@ -61,6 +61,9 @@ namespace rpg_patcher
                     new MenuItem ("_List files in the archive", "", () => {
                         Functions.Export.GetAllFiles();
                     }),
+                    new MenuItem ("_Export single file", "", () => {
+                        Functions.Operation.ExecuteIfProjectSelected(() => Application.Run(StaticWindows.ExportOneFile._window));
+                    }),
                     new MenuItem ("_Export everything", "", () => {
                         Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles()));
                     }),

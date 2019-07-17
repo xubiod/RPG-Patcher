@@ -16,6 +16,7 @@ namespace rpg_patcher
             About.Init();
             Main.Init();
             Settings.Init();
+            ExportOneFile.Init();
         }
 
         public static void RefreshColors()
@@ -23,6 +24,7 @@ namespace rpg_patcher
             About.RefreshColors();
             Main.RefreshColors();
             Settings.RefreshColors();
+            ExportOneFile.RefreshColors();
         }
 
         public static class About
@@ -125,7 +127,7 @@ namespace rpg_patcher
                 {
                     X = Pos.At(3),
                     Y = Pos.At(11),
-                    Clicked = () => Functions.Export.CopyGameFiles()
+                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.CopyGameFiles())
                 },
                 new Label("Copies game files. Use as backup or \"deeper\" modding.")
                 {
@@ -147,7 +149,7 @@ namespace rpg_patcher
                 {
                     X = Pos.At(3),
                     Y = Pos.At(15),
-                    Clicked = () => { Functions.Project.MakeProject(); }
+                    Clicked = () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); }
                 },
                 new Label("Makes a project file in the loaded project's version.")
                 {
@@ -210,6 +212,61 @@ namespace rpg_patcher
                     SelectionChanged = (int x) => { OverwriteFiles = x == 0; }
                 }
             }; 
+
+            static Button quit = new Button("Close", true)
+            {
+                X = Pos.Center(),
+                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3,
+                Clicked = () => { Application.Top.SetFocus(Main._window); Application.RequestStop(); }
+            };
+        }
+
+        public static class ExportOneFile
+        {
+            public static Window _window = new Window("Export One File");
+
+            public static Window Init()
+            {
+                _window.Add(content);
+                _window.Width = Dim.Sized(52);
+                _window.Height = Dim.Sized(8);
+
+                _window.X = Pos.Center();
+                _window.Y = Pos.Center();
+
+                _window.Add(save, quit);
+
+                return _window;
+            }
+
+            public static void RefreshColors()
+            {
+                _window.ColorScheme = Colors.Base;
+            }
+
+            public static string GetFile()
+            {
+                return (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Id == "FileToExport") as TextField).Text.ToString();
+            }
+
+            public static int BytePref = 0;
+            public static bool OverwriteFiles = true;
+
+            static View[] content = {
+                new Label(1, 1, "File from Archive (list directory!)"),
+
+                new TextField(1, 2, 48, "")
+                {
+                    Id = "FileToExport"
+                }
+            };
+
+            static Button save = new Button("Export")
+            {
+                X = Pos.At(1),
+                Y = Pos.At(4),
+                Clicked = () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.FindAndExportFile()))
+            };
 
             static Button quit = new Button("Close", true)
             {
