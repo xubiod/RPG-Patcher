@@ -381,7 +381,7 @@ namespace rpg_patcher
                             RGSSADv1 encrypted = new RGSSADv1(path);
                             try
                             {
-                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name == file);
+                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
@@ -392,7 +392,7 @@ namespace rpg_patcher
                             }
                             catch (IOException fileErr)
                             {
-                                Operation.ShowError(fileErr.Message);
+                                Operation.ShowError(fileErr.Message + "\n\n" + fileErr.Source);
                             }
                             encrypted.Dispose();
                             break;
@@ -402,7 +402,7 @@ namespace rpg_patcher
                             RGSSADv3 encrypted = new RGSSADv3(path);
                             try
                             {
-                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name == file);
+                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
@@ -413,7 +413,7 @@ namespace rpg_patcher
                             }
                             catch (IOException fileErr)
                             {
-                                Operation.ShowError(fileErr.Message);
+                                Operation.ShowError(fileErr.Message + "\n\n" + fileErr.Source);
                             }
                             encrypted.Dispose();
                             break;
@@ -458,7 +458,7 @@ namespace rpg_patcher
                 _SaveDialog.AllowedFileTypes = allowed_file_types;
                 _SaveDialog.AddButton(new Button("Set Dir...") { Clicked = () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } } });
 
-                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += callback;
+                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += () => callback();
 
                 (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.SetFocus(Application.Top.MostFocused);
 
