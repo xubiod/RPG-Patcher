@@ -237,6 +237,8 @@ namespace rpg_patcher
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
 
+                            Misc.UpdateStatus("Displaying files " + (location * 10 + 1) + " thru " + Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
+
                             encrypted.Dispose();
                             break;
                         }
@@ -291,6 +293,7 @@ namespace rpg_patcher
                             RGSSADv1 encrypted = new RGSSADv1(path);
                             try
                             {
+                                Misc.UpdateStatus("Extracting all files for a XP/VX archive...");
                                 encrypted.ExtractAllFiles(where, StaticWindows.Settings.OverwriteFiles);
                             }
                             catch (IOException file)
@@ -305,6 +308,7 @@ namespace rpg_patcher
                             RGSSADv3 encrypted = new RGSSADv3(path);
                             try
                             {
+                                Misc.UpdateStatus("Extracting all files for a VX Ace archive...");
                                 encrypted.ExtractAllFiles(where, StaticWindows.Settings.OverwriteFiles);
                             }
                             catch (IOException file)
@@ -333,7 +337,7 @@ namespace rpg_patcher
                     .Where(x => !x.Contains("rgss3a"))
                     .ToList();
 
-                FileDialog.CreateSaveDialog("Copy to...", "Pick a place", new string[] { "rgssad", "rgss2a", "rgss3a" }, null);
+                FileDialog.CreateSaveDialog("Copy to...", "Pick a place", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => { return; });
 
                 if (!Directory.Exists(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\")) Directory.CreateDirectory(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\");
 
@@ -530,6 +534,7 @@ namespace rpg_patcher
 
                     foreach (FileInfo fi in source.GetFiles())
                     {
+                        UpdateStatus("Copying file: " + fi.Name);
                         fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
                     }
 
@@ -538,6 +543,7 @@ namespace rpg_patcher
 
                     foreach (DirectoryInfo diSourceDir in source.GetDirectories())
                     {
+                        UpdateStatus("Copying directory: " + diSourceDir.Name);
                         DirectoryInfo nextTargetDir = target.CreateSubdirectory(diSourceDir.Name);
                         CopyAll(diSourceDir, nextTargetDir);
                     }
@@ -549,6 +555,12 @@ namespace rpg_patcher
 
                     Operation.ShowError(ie.Message);
                 }
+            }
+
+            public static void UpdateStatus(string newStatus)
+            {
+                (Application.Top.Subviews.FirstOrDefault(x => x.Id == "ProgressText") as Label).Text = newStatus;
+                Application.Refresh();
             }
         }
     }

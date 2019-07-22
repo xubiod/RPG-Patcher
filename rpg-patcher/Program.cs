@@ -86,7 +86,7 @@ namespace rpg_patcher
             });
 
             // add menu and main window
-            Application.Top.Add(menu, StaticWindows.Main._window);
+            Application.Top.Add(menu, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Percent(99F) });
 
             // initalize static windows
             StaticWindows.Create();
