@@ -80,7 +80,7 @@ namespace rpg_patcher
 
                 new MenuBarItem ("_Patching", new MenuItem [] {
                     new MenuItem ("_Working on it", "", () => {
-                        // something
+                        Functions.Operation.ShowError("Ok. You clicked on something that deliberately says \"Working on it\" and expect it to fucking do something? Are you fucking serious? How dense is your fucking brain to have something bounce clean off your goddamn eyes? Now fuck off and do something else.");
                     })
                 }),
 
