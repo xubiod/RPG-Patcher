@@ -151,7 +151,9 @@ namespace rpg_patcher
                 try
                 {
                     Functions.Operation.ExecuteIfProjectSelected(() => {
+                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                         ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
+
                         if (!ignoreComplete) Application.Run(Operation.Complete);
                     });
                 }
@@ -161,13 +163,15 @@ namespace rpg_patcher
                 }
             }
 
-            public static void MakeProjectIndeterministic(RPGMakerVersion type)
+            public static void MakeProjectIndeterministic(RPGMakerVersion type, bool ignoreComplete = false)
             {
                 try
                 {
                     FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () => {
+                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                         ProjectGenerator.GenerateProject(type, FileDialog._SaveDialog.DirectoryPath.ToString());
-                        Application.Run(Operation.Complete);
+
+                        if (!ignoreComplete) Application.Run(Operation.Complete);
                     });
                 }
                 catch (Exception ex)
@@ -569,6 +573,11 @@ namespace rpg_patcher
             {
                 (Application.Top.Subviews.FirstOrDefault(x => x.Id == "ProgressText") as Label).Text = newStatus;
                 Application.Refresh();
+            }
+
+            public static void EnsurePathExists(string path)
+            {
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             }
         }
     }
