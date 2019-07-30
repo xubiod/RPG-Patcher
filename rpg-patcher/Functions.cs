@@ -52,18 +52,18 @@ namespace rpg_patcher
                 #endregion
 
                 #region file info
-                Export.AllFiles.ColorScheme = Program.ArchivedList;
+                Extract.AllFiles.ColorScheme = Program.ArchivedList;
 
-                Export.AllFiles.Width = Dim.Percent(80);
-                Export.AllFiles.Height = Dim.Percent(80);
+                Extract.AllFiles.Width = Dim.Percent(80);
+                Extract.AllFiles.Height = Dim.Percent(80);
 
-                Export.AllFiles.X = Pos.Center();
-                Export.AllFiles.Y = Pos.Center();
+                Extract.AllFiles.X = Pos.Center();
+                Extract.AllFiles.Y = Pos.Center();
 
-                Export.AllFiles.Add(Export.infoLabel);
-                Export.AllFiles.Add(Export.allFilesNext);
-                Export.AllFiles.Add(Export.allFilesLast);
-                Export.AllFiles.Add(Export.quitAllFiles);
+                Extract.AllFiles.Add(Extract.infoLabel);
+                Extract.AllFiles.Add(Extract.allFilesNext);
+                Extract.AllFiles.Add(Extract.allFilesLast);
+                Extract.AllFiles.Add(Extract.quitAllFiles);
                 #endregion
 
                 #region error 
@@ -179,7 +179,7 @@ namespace rpg_patcher
             }
         }
 
-        public static class Export
+        public static class Extract
         {
             public static Label  infoLabel =    new Label(1, 1, "a\na\na\na\na\na\na\na\na\na\na\na\na\na");
             static int    location =     0;
@@ -366,7 +366,7 @@ namespace rpg_patcher
                 if (!ignoreComplete) Application.Run(Operation.Complete);
             }
 
-            public static void FindAndExportFile(bool ignoreComplete = false)
+            public static void FindAndExtractFile(bool ignoreComplete = false)
             {
                 string path = Program.ProjectPath;
                 string where = Functions.FileDialog._SaveDialog.DirectoryPath.ToString();

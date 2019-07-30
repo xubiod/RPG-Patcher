@@ -51,30 +51,30 @@ namespace rpg_patcher
                     })
                 }),
 
-                new MenuBarItem ("_Exporting", new MenuItem [] {
+                new MenuBarItem ("_Extracting", new MenuItem [] {
                     new MenuItem ("_Load (DO FIRST)", "", () => {
                         Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements);
                     }),
                     new MenuItem ("_Copy game files from project directory", "", () => {
-                        Functions.Export.CopyGameFiles();
+                        Functions.Extract.CopyGameFiles();
                     }),
                     new MenuItem ("_List files in the archive", "", () => {
-                        Functions.Export.GetAllFiles();
+                        Functions.Extract.GetAllFiles();
                     }),
-                    new MenuItem ("_Export single file", "", () => {
+                    new MenuItem ("_Extract single file", "", () => {
                         Functions.Operation.ExecuteIfProjectSelected(() => Application.Run(StaticWindows.ExportOneFile._window));
                     }),
-                    new MenuItem ("_Export everything", "", () => {
-                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles()));
+                    new MenuItem ("_Extract everything", "", () => {
+                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
                     }),
-                    new MenuItem ("_Export everything + project files", "", () => {
-                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles(true)));
+                    new MenuItem ("_Extract everything + project files", "", () => {
+                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles(true)));
                         Functions.Project.MakeProjectWithSavePath();
                     }),
-                    new MenuItem ("_Export everything + project files + game", "", () => {
-                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles(true)));
+                    new MenuItem ("_Extract everything + project files + game", "", () => {
+                        Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles(true)));
                         Functions.Project.MakeProjectWithSavePath(true);
-                        Functions.Export.CopyGameFilesIndeterministic();
+                        Functions.Extract.CopyGameFilesIndeterministic();
                     }),
                 }),
 

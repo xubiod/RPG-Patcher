@@ -116,7 +116,7 @@ namespace rpg_patcher
                 {
                     X = Pos.At(3),
                     Y = Pos.At(9),
-                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.GetAllFiles())
+                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles())
                 },
                 new Label("Lists infromation about the archive.")
                 {
@@ -127,7 +127,7 @@ namespace rpg_patcher
                 {
                     X = Pos.At(3),
                     Y = Pos.At(11),
-                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.CopyGameFiles())
+                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles())
                 },
                 new Label("Copies game files. Use as backup or \"deeper\" modding.")
                 {
@@ -138,7 +138,7 @@ namespace rpg_patcher
                 {
                     X = Pos.At(3),
                     Y = Pos.At(13),
-                    Clicked = () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.ExtractAllFiles()))
+                    Clicked = () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()))
                 },
                 new Label("Extracts all encrypted files from the project.")
                 {
@@ -265,7 +265,7 @@ namespace rpg_patcher
             {
                 X = Pos.At(1),
                 Y = Pos.At(4),
-                Clicked = () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Export.FindAndExportFile()))
+                Clicked = () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()))
             };
 
             static Button quit = new Button("Close", true)
