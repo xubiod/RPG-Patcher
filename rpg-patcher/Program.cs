@@ -17,7 +17,7 @@ namespace rpg_patcher
 
             //Application.Top.ColorScheme = 
 
-            Mode(0);
+            Theme(0);
 
             // menubar
             var menu = new MenuBar(new MenuBarItem[] {
@@ -78,6 +78,12 @@ namespace rpg_patcher
                     }),
                 }),
 
+                new MenuBarItem ("_Patching", new MenuItem [] {
+                    new MenuItem ("_Working on it", "", () => {
+                        // something
+                    })
+                }),
+
                 new MenuBarItem ("_Settings", new MenuItem [] {
                     new MenuItem ("_Open settings window", "", () => {
                         Application.Run(StaticWindows.Settings._window);
@@ -99,7 +105,7 @@ namespace rpg_patcher
         public static ColorScheme ArchivedList;
         public static ColorScheme HighlighedLabel;
 
-        public static void Mode(int mode)
+        public static void Theme(int mode)
         {
             switch (mode)
             {

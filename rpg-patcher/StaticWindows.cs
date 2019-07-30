@@ -202,7 +202,7 @@ namespace rpg_patcher
 
                 new RadioGroup(2, 7, new string[] {"Dark (Default)", "Light"}, 0)
                 {
-                    SelectionChanged = (int x) => { Program.Mode(x); }
+                    SelectionChanged = (int x) => { Program.Theme(x); }
                 },
 
                 new Label(1, 10, "File Behaviour"),
