@@ -128,17 +128,20 @@ namespace rpg_patcher
 
         public static class Project
         {
-            public static void MakeProject()
+            public static void MakeProject(bool ignoreComplete = false)
             {
                 try
                 {
-                    if (Operation.GetVersion(Program.ProjectPath) != "")
+                    Functions.Operation.ExecuteIfProjectSelected(() =>
                     {
-                        FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () => {
+                        FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () =>
+                        {
+                            Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                             ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
-                            Application.Run(Operation.Complete); 
+
+                            if (!ignoreComplete) Application.Run(Operation.Complete);
                         });
-                    }
+                    });
                 }
                 catch (Exception ex)
                 {
