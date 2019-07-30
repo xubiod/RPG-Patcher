@@ -375,6 +375,8 @@ namespace rpg_patcher
                 //WaitDialog.Width = 15;
                 //WaitDialog.Height = 3;
 
+                Functions.Misc.UpdateStatus("Extracting file: " + file);
+
                 RPGMakerVersion _version = RGSSAD.GetVersion(path);
 
                 switch (_version)
@@ -392,7 +394,11 @@ namespace rpg_patcher
                                     encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
                                 }
 
-                                if (!ignoreComplete) Application.Run(Operation.Complete);
+                                if (!ignoreComplete)
+                                {
+                                    Functions.Misc.UpdateStatus("Extracted file: " + file);
+                                    Application.Run(Operation.Complete);
+                                }
                             }
                             catch (IOException fileErr)
                             {
@@ -413,7 +419,11 @@ namespace rpg_patcher
                                     encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
                                 }
 
-                                if (!ignoreComplete) Application.Run(Operation.Complete);
+                                if (!ignoreComplete)
+                                {
+                                    Functions.Misc.UpdateStatus("Extracted file: " + file);
+                                    Application.Run(Operation.Complete);
+                                }
                             }
                             catch (IOException fileErr)
                             {
