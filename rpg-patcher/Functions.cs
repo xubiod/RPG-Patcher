@@ -17,7 +17,7 @@ namespace rpg_patcher
         public static class Operation
         {
             static Window Error = new Window("Error!");
-            static Label errorLabel = new Label("");
+            static Label errorLabel = new Label("") { Height = Dim.Fill(1) };
             static Button quitError = new Button("Close", true)
             {
                 X = Pos.Center(),
@@ -87,9 +87,9 @@ namespace rpg_patcher
 
             public static void ShowError(string issue)
             {
-                errorLabel.Text = Regex.Replace(issue, ".{48}", "$0\n");
-                errorLabel.X = Pos.Center();
-                errorLabel.Y = Pos.Center();
+                errorLabel.Text = Regex.Replace(issue, "(.{46})", "$1\n");
+                errorLabel.X = 1;
+                errorLabel.Y = 1;
 
                 Error.Add(errorLabel);
                 Error.Add(quitError);
