@@ -246,7 +246,7 @@ namespace rpg_patcher
 
             public static string GetFile()
             {
-                return (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Id == "FileToExport") as TextField).Text.ToString();
+                return (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as TextField ?? new TextField("x")).Id == "FileToExport") as TextField).Text.ToString();
             }
 
             public static int BytePref = 0;
