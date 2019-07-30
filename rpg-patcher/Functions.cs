@@ -12,6 +12,8 @@ namespace rpg_patcher
 {
     static class Functions
     {
+        public static string RNDString = "01990849ca73d97c358aa63409043a93";
+
         public static class Operation
         {
             static Window Error = new Window("Error!");
@@ -113,7 +115,7 @@ namespace rpg_patcher
             public static void ExecuteIfProjectSelected(Action callback)
             {
                 try {
-                    if ((Program.ProjectPath ?? "") != "")
+                    if ((Program.ProjectPath ?? RNDString) != RNDString)
                     {
                         callback();
                     }
@@ -148,11 +150,10 @@ namespace rpg_patcher
             {
                 try
                 {
-                    if (Operation.GetVersion(Program.ProjectPath) != "")
-                    {
+                    Functions.Operation.ExecuteIfProjectSelected(() => {
                         ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
                         if (!ignoreComplete) Application.Run(Operation.Complete);
-                    }
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -164,13 +165,10 @@ namespace rpg_patcher
             {
                 try
                 {
-                    if (Operation.GetVersion(Program.ProjectPath) != "")
-                    {
-                        FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () => {
-                            ProjectGenerator.GenerateProject(type, FileDialog._SaveDialog.DirectoryPath.ToString());
-                            Application.Run(Operation.Complete);
-                        });
-                    }
+                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () => {
+                        ProjectGenerator.GenerateProject(type, FileDialog._SaveDialog.DirectoryPath.ToString());
+                        Application.Run(Operation.Complete);
+                    });
                 }
                 catch (Exception ex)
                 {
