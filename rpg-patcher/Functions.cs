@@ -500,16 +500,24 @@ namespace rpg_patcher
              * xor encryption/decryption is the same thing both ways
              */
 
+            static Stream EncryptedStream = new FileStream("", FileMode.Open);
+
             public static byte[] EncryptV1()
             {
                 uint key = RPGMakerDecrypter.Decrypter.Constants.RGASSADv1Key;
                 byte[] keyBytes = BitConverter.GetBytes(key);
                 int j = 0;
 
-                byte[] decryptedFiles = new byte[1];
-                byte[] encryptedFiles = new byte[decryptedFiles.Length];
+                List<byte> decryptedFiles = new List<byte>();
 
-                for (int i = 0; i < decryptedFiles.Length - 1; i++)
+                using (BinaryReader binReader = new BinaryReader(EncryptedStream))
+                {
+                    decryptedFiles.Add(binReader.ReadByte());
+                }
+
+                byte[] encryptedFiles = new byte[decryptedFiles.ToArray().Length];
+
+                for (int i = 0; i < decryptedFiles.ToArray().Length - 1; i++)
                 {
                     if (j == 4)
                     {
