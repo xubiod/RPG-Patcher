@@ -485,6 +485,22 @@ namespace rpg_patcher
             }
         }
 
+        public static class Encryption
+        {
+            /* 
+             * ---===--- current knowledge ---===---
+             * 
+             * it is xor encryption
+             * 
+             * here's the rpgmaker xp/vx encryption key
+             * RPGMakerDecrypter.Decrypter.Constants.RGASSADv1Key
+             * 
+             * rpgmaker vx ace's key seems to be determined by the file
+             * 
+             * xor encryption/decryption is the same thing both ways
+             */
+        }
+
         public static class Misc
         {
             public static string FileSize(int bytes)
