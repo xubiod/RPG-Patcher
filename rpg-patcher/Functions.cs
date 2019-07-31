@@ -499,6 +499,59 @@ namespace rpg_patcher
              * 
              * xor encryption/decryption is the same thing both ways
              */
+
+            public static byte[] EncryptV1()
+            {
+                uint key = RPGMakerDecrypter.Decrypter.Constants.RGASSADv1Key;
+                byte[] keyBytes = BitConverter.GetBytes(key);
+                int j = 0;
+
+                byte[] decryptedFiles = new byte[1];
+                byte[] encryptedFiles = new byte[decryptedFiles.Length];
+
+                for (int i = 0; i < decryptedFiles.Length - 1; i++)
+                {
+                    if (j == 4)
+                    {
+                        j = 0;
+                        key *= 7;
+                        key += 3;
+                        keyBytes = BitConverter.GetBytes(key);
+                    }
+
+                    encryptedFiles[i] = (byte)(decryptedFiles[i] ^ keyBytes[j]);
+                    j++;
+                }
+
+                return encryptedFiles;
+            }
+
+            /*
+            private byte[] DecryptFileData(byte[] encryptedFileData, uint key)
+            {
+                byte[] decryptedFileData = new byte[encryptedFileData.Length];
+
+                uint tempKey = key;
+                byte[] keyBytes = BitConverter.GetBytes(key);
+                int j = 0;
+
+                for (int i = 0; i <= encryptedFileData.Length - 1; i++)
+                {
+                    if (j == 4)
+                    {
+                        j = 0;
+                        tempKey *= 7;
+                        tempKey += 3;
+                        keyBytes = BitConverter.GetBytes(tempKey);
+                    }
+
+                    decryptedFileData[i] = (byte)(encryptedFileData[i] ^ keyBytes[j]);
+
+                    j += 1;
+                }
+
+                return decryptedFileData;
+            }*/
         }
 
         public static class Misc
