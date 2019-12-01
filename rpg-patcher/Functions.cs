@@ -26,15 +26,12 @@ namespace rpg_patcher
                 using (var client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", "RPG Patcher-" + ThisAssembly.Git.Tag);
-                    using (var response = client.GetAsync("https://api.github.com/repos/NancyFx/Nancy/commits").Result)
+                    using (var response = client.GetAsync("https://api.github.com/repos/xubiod/RPG-Patcher/commits").Result)
                      {
                         var json = response.Content.ReadAsStringAsync().Result;
 
                         dynamic commits = JArray.Parse(json);
-                        string lastCommit = commits[0].commit.tree.sha;
-
-                        Console.WriteLine(lastCommit);
-                        Console.WriteLine(ThisAssembly.Git.Sha);
+                        string lastCommit = commits[0].sha;
 
                         return lastCommit == ThisAssembly.Git.Sha;
                     }
