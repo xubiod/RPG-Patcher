@@ -1,18 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>rpg_patcher</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GitInfo" Version="2.0.21">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Terminal.Gui" Version="0.24.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="RPGMakerDecrypter.Decrypter.Core">
-      <HintPath>..\..\..\Remote Projects\RPGMakerDecrypter\RPGMakerDecrypter.Decrypter.Core\bin\Debug\netcoreapp2.1\RPGMakerDecrypter.Decrypter.Core.dll</HintPath>
+      <HintPath>G:\Remote Projects\RPGMakerDecrypter\RPGMakerDecrypter.Decrypter.Core\bin\Debug\netcoreapp2.1\RPGMakerDecrypter.Decrypter.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 

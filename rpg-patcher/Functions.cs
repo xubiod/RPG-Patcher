@@ -7,12 +7,106 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Terminal.Gui;
 using TGAttribute = Terminal.Gui.Attribute;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Microsoft.Win32;
+using System.Runtime.InteropServices;
+using System.Net.Http;
 
 namespace rpg_patcher
 {
     static class Functions
     {
         public static string RNDString = "01990849ca73d97c358aa63409043a93";
+
+        public static class Checks
+        {
+            public static bool IsUpToDate()
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "RPG Patcher-" + ThisAssembly.Git.Tag);
+                    using (var response = client.GetAsync("https://api.github.com/repos/NancyFx/Nancy/commits").Result)
+                     {
+                        var json = response.Content.ReadAsStringAsync().Result;
+
+                        dynamic commits = JArray.Parse(json);
+                        string lastCommit = commits[0].commit.tree.sha;
+
+                        Console.WriteLine(lastCommit);
+                        Console.WriteLine(ThisAssembly.Git.Sha);
+
+                        return lastCommit == ThisAssembly.Git.Sha;
+                    }
+                }
+            }
+
+            // https://stackoverflow.com/questions/16379143/check-if-application-is-installed-in-registry
+            static bool CheckInstalled(string c_name)
+            {
+                string displayName;
+
+                string registryKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(registryKey);
+                if (key != null)
+                {
+                    foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+                    {
+                        displayName = subkey.GetValue("DisplayName") as string;
+                        if (displayName != null && displayName.Contains(c_name))
+                        {
+                            return true;
+                        }
+                    }
+                    key.Close();
+                }
+
+                registryKey = @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+                key = Registry.LocalMachine.OpenSubKey(registryKey);
+                if (key != null)
+                {
+                    foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+                    {
+                        displayName = subkey.GetValue("DisplayName") as string;
+                        if (displayName != null && displayName.Contains(c_name))
+                        {
+                            return true;
+                        }
+                    }
+                    key.Close();
+                }
+                return false;
+            }
+
+            public static void CheckForRPGMaker()
+            {
+                var xp =    CheckInstalled("RPG Maker XP");
+                var vx =    CheckInstalled("RPG Maker VX");
+                var vxace = CheckInstalled("RPG Maker VX Ace");
+
+                var fore = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                if (!xp)    Console.WriteLine("RPG Maker XP has not been detected in the registry");
+                if (!vx)    Console.WriteLine("RPG Maker VX has not been detected in the registry");
+                if (!vxace) Console.WriteLine("RPG Maker VX Ace has not been detected in the registry");
+
+
+                Console.ForegroundColor = fore;
+                if (!(xp && vx && vxace))
+                {
+                    Console.Write(
+@"
+This doesn't mean that you can't run or use RPG Patcher, but you won't be able to edit maps and scripts without
+some external tools or the appropriate RPG Maker version.
+
+Please do not pirate RPG Maker just for modding, fan-made patches, etc.
+
+Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+        }
 
         public static class Operation
         {
