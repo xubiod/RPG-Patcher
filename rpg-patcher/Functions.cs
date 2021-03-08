@@ -88,7 +88,6 @@ namespace rpg_patcher
                 if (!vx)    Console.WriteLine("RPG Maker VX has not been detected in the registry");
                 if (!vxace) Console.WriteLine("RPG Maker VX Ace has not been detected in the registry");
 
-
                 Console.ForegroundColor = fore;
                 if (!(xp && vx && vxace))
                 {
@@ -720,7 +719,6 @@ Press any key to continue...");
                         UpdateStatus("Copying file: " + fi.Name);
                         fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
                     }
-
 
                     //copy all the sub directories using recursion
 
