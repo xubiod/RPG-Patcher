@@ -332,7 +332,7 @@ Press any key to continue...");
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
 
-                            Misc.UpdateStatus("Displaying files " + (location * 10 + 1) + " thru " + Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
+                            Misc.UpdateStatus("Displaying files " + ((location * 10) + 1) + " thru " + Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
 
                             encrypted.Dispose();
                             break;
