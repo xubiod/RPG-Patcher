@@ -13,7 +13,7 @@ namespace rpg_patcher
         static void Main(string[] args)
         {
             // update detector
-            if (!Functions.Checks.IsUpToDate())
+            if (false)//!Functions.Checks.IsUpToDate())
             {
                 var defaultFore = Console.ForegroundColor;
                 Console.Write("This version of RPG Patcher is out of date\nPlease update it manually with .NET Core 3 from:\n");
@@ -110,7 +110,7 @@ namespace rpg_patcher
             });
 
             // add menu and main window
-            Application.Top.Add(menu, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Percent(99F) });
+            Application.Top.Add(menu, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Bottom(StaticWindows.Main._window) });
 
             // initalize static windows
             StaticWindows.Create();
@@ -220,7 +220,7 @@ namespace rpg_patcher
         public static void UpdateElements()
         {
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
-            ProjectPath = (Functions.FileDialog._OpenDialog.DirectoryPath + "\\" + Functions.FileDialog._OpenDialog.FilePath).ToString();
+            ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
 
             (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = "Project: " + ProjectPath + "\nVersion: " + Functions.Operation.GetVersion(ProjectPath);
 

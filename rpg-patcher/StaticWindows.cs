@@ -33,6 +33,8 @@ namespace rpg_patcher
 
             public static Window Init()
             {
+                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+
                 _window.Add(content);
                 _window.Width = content.Width + 4;
                 _window.Height = content.Height + 5;
@@ -61,8 +63,7 @@ namespace rpg_patcher
             static Button quit = new Button("Close", true)
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3,
-                Clicked = () => { Application.Top.SetFocus(Main._window); Application.RequestStop(); }
+                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
             };
         }
 
@@ -76,6 +77,12 @@ namespace rpg_patcher
                 _window.Y = 1;
                 _window.Width = Dim.Fill();
                 _window.Height = Dim.Fill();
+
+                (_contents[0] as Button).Clicked += () => Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements);
+                (_contents[4] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles());
+                (_contents[6] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles());
+                (_contents[8] as Button).Clicked += () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
+                (_contents[10] as Button).Clicked += () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); };
 
                 _window.Add(_contents.ToArray());
             }
@@ -92,8 +99,7 @@ namespace rpg_patcher
                 new Button("Load", true)
                 {
                     X = Pos.At(2),
-                    Y = Pos.At(2),
-                    Clicked = () => Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements)
+                    Y = Pos.At(2)
                 },
                 new Label("Loads an RPG Maker project.")
                 {
@@ -105,7 +111,8 @@ namespace rpg_patcher
                     X = Pos.At(2),
                     Y = Pos.At(4),
                     Id = "ProjectString",
-                    ColorScheme = Program.HighlighedLabel
+                    ColorScheme = Program.HighlighedLabel,
+                    Width = 64
                 },
                 new Label("Here's some of the more common actions you can do:")
                 {
@@ -115,8 +122,7 @@ namespace rpg_patcher
                 new Button("Show Info", true)
                 {
                     X = Pos.At(3),
-                    Y = Pos.At(9),
-                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles())
+                    Y = Pos.At(9)
                 },
                 new Label("Lists infromation about the archive.")
                 {
@@ -126,8 +132,7 @@ namespace rpg_patcher
                 new Button("Copy Files", true)
                 {
                     X = Pos.At(3),
-                    Y = Pos.At(11),
-                    Clicked = () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles())
+                    Y = Pos.At(11)
                 },
                 new Label("Copies game files. Use as backup or \"deeper\" modding.")
                 {
@@ -137,8 +142,7 @@ namespace rpg_patcher
                 new Button("Extract All", true)
                 {
                     X = Pos.At(3),
-                    Y = Pos.At(13),
-                    Clicked = () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()))
+                    Y = Pos.At(13)
                 },
                 new Label("Extracts all encrypted files from the project.")
                 {
@@ -148,8 +152,7 @@ namespace rpg_patcher
                 new Button("Make Project", true)
                 {
                     X = Pos.At(3),
-                    Y = Pos.At(15),
-                    Clicked = () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); }
+                    Y = Pos.At(15)
                 },
                 new Label("Makes a project file in the loaded project's version.")
                 {
@@ -170,12 +173,18 @@ namespace rpg_patcher
 
             public static Window Init()
             {
+                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { BytePref = x.SelectedItem; };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { OverwriteFiles = x.SelectedItem == 0; };
+
                 _window.Add(content);
                 _window.Width = Dim.Percent(80);
                 _window.Height = Dim.Percent(80);
 
                 _window.X = Pos.Center();
                 _window.Y = Pos.Center();
+
+                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
 
                 _window.Add(quit);
 
@@ -193,31 +202,21 @@ namespace rpg_patcher
             static View[] content = {
                 new Label(1, 1, "Byte Representation"),
 
-                new RadioGroup(2, 2, new string[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0)
-                {
-                    SelectionChanged = (int x) => { BytePref = x; }
-                },
+                new RadioGroup(2, 2, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
 
                 new Label(1, 6, "Theme"),
 
-                new RadioGroup(2, 7, new string[] {"Dark (Default)", "Light"}, 0)
-                {
-                    SelectionChanged = (int x) => { Program.Theme(x); }
-                },
+                new RadioGroup(2, 7, new NStack.ustring[] {"Dark (Default)", "Light"}, 0),
 
                 new Label(1, 10, "File Behaviour"),
 
-                new RadioGroup(2, 11, new string[] {"Always Overwrite (Default)", "Do not overwrite"}, 0)
-                {
-                    SelectionChanged = (int x) => { OverwriteFiles = x == 0; }
-                }
-            }; 
+                new RadioGroup(2, 11, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0)
+            };
 
             static Button quit = new Button("Close", true)
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3,
-                Clicked = () => { Application.Top.SetFocus(Main._window); Application.RequestStop(); }
+                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
             };
         }
 
@@ -233,6 +232,9 @@ namespace rpg_patcher
 
                 _window.X = Pos.Center();
                 _window.Y = Pos.Center();
+
+                save.Clicked += () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()));
+                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
 
                 _window.Add(save, quit);
 
@@ -264,15 +266,13 @@ namespace rpg_patcher
             static Button save = new Button("Export")
             {
                 X = Pos.At(1),
-                Y = Pos.At(4),
-                Clicked = () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()))
+                Y = Pos.At(4)
             };
 
             static Button quit = new Button("Close", true)
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3,
-                Clicked = () => { Application.Top.SetFocus(Main._window); Application.RequestStop(); }
+                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
             };
         }
     }
