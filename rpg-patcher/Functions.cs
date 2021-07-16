@@ -296,8 +296,8 @@ Press any key to continue...");
             {
                 infoLabel = new Label()
                 {
-                    X = Pos.Left(AllFiles),
-                    Y = Pos.Top(AllFiles),
+                    X = 1,
+                    Y = 0,
                     Width = Dim.Fill(1),
                     Height = Dim.Fill(3)
                 };
@@ -324,7 +324,7 @@ Press any key to continue...");
                 allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(this); };
             }
 
-            public static readonly int MaxNamesOnDisplay = 15;
+            public const int MaxNamesOnDisplay = 15;
 
             public static void GetAllFiles(Extract useExtractObj = null)
             {
@@ -388,7 +388,7 @@ Press any key to continue...");
                     default: break;
                 }
 
-                infoText += "\n" + (location + 1).ToString() + " / " + max.ToString();
+                infoText += $"\n{location + 1} / {max}";
 
                 if (useExtractObj == null)
                 {
