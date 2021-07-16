@@ -240,6 +240,7 @@ namespace rpg_patcher
 
             //StaticWindows.RefreshColors();
             Application.Refresh();
+            StaticWindows.Main.RefreshColors();
         }
 
         public static void UpdateElements()

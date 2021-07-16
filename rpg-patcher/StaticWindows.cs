@@ -228,7 +228,7 @@ namespace rpg_patcher
 
                 new RadioGroup(2, 2, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
 
-                new Label(1, 6, "Theme"),
+                new Label(1, 6, "Theme (updates background window)"),
 
                 new RadioGroup(2, 7, new NStack.ustring[] {"Dark (Default)", "Light"}, 0),
 
