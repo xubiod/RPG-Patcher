@@ -140,7 +140,6 @@ namespace rpg_patcher
             // initalize static windows
             //StaticWindows.Create();
             StaticWindows.Main.Init();
-            Functions.Operation.Init();
 
             // run it
             Application.Run();

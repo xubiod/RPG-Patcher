@@ -107,17 +107,16 @@ Press any key to continue...");
             static Label errorLabel = new Label("") { Height = Dim.Fill(1), Width = Dim.Fill(1) };
             static Button quitError;
 
-            public static Window Complete = new Window("Operation complete.");
-            static Button quitComplete = new Button("Close", true)
+            public static void OperationCompleted()
             {
-                X = Pos.Center(),
-                Y = Pos.Bottom(Complete) - Pos.Y(Complete) - 3
-            };
+                Window completed = new Window("Operation complete.");
+                Button quitComplete = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(completed) - Pos.Y(completed) - 3
+                };
 
-            public static void Init()
-            {
-                #region operation complete
-                Complete.ColorScheme = new ColorScheme()
+                completed.ColorScheme = new ColorScheme()
                 {
                     Normal = TGAttribute.Make(Color.Black, Color.BrightGreen),
                     Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -125,16 +124,16 @@ Press any key to continue...");
                     HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
                 };
 
-                Complete.Width = 25;
-                Complete.Height = 3;
+                completed.Width = 25;
+                completed.Height = 3;
 
-                Complete.X = Pos.Center();
-                Complete.Y = Pos.Center();
+                completed.X = Pos.Center();
+                completed.Y = Pos.Center();
 
                 quitComplete.Clicked += () => { StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
 
-                Complete.Add(quitComplete);
-                #endregion
+                completed.Add(quitComplete);
+                Application.Run(completed);
             }
 
             public static void ShowError(string issue)
@@ -221,6 +220,8 @@ Press any key to continue...");
                             results[i].Save(outfile);
                         }
                     }
+
+                    Operation.OperationCompleted();
                 }
 
                 public static void Convert2kChipsets(string pathToChipsets, string output)
@@ -229,13 +230,14 @@ Press any key to continue...");
 
                     List<string> allChipsets = Directory.EnumerateFiles(pathToChipsets).ToList<string>();
                     RM2k2XP.Converters.Formats.RPGMakerXPTileset results;
-                    int i;
 
                     foreach (string filename in allChipsets)
                     {
                         results = converter.ToRPGMakerXpTileset(filename);
                         results.SaveAll($"{Path.GetFileNameWithoutExtension(filename)}", $"{output}\\");
                     }
+
+                    Operation.OperationCompleted();
                 }
             }
         }
@@ -253,7 +255,7 @@ Press any key to continue...");
                             Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                             ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
 
-                            if (!ignoreComplete) Application.Run(Operation.Complete);
+                            if (!ignoreComplete) Operation.OperationCompleted();
                         });
                     });
                 }
@@ -271,7 +273,7 @@ Press any key to continue...");
                         Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                         ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
 
-                        if (!ignoreComplete) Application.Run(Operation.Complete);
+                        if (!ignoreComplete) Operation.OperationCompleted();
                     });
                 }
                 catch (Exception ex)
@@ -288,7 +290,7 @@ Press any key to continue...");
                         Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
                         ProjectGenerator.GenerateProject(type, FileDialog._SaveDialog.DirectoryPath.ToString());
 
-                        if (!ignoreComplete) Application.Run(Operation.Complete);
+                        if (!ignoreComplete) Operation.OperationCompleted();
                     });
                 }
                 catch (Exception ex)
@@ -490,7 +492,7 @@ Press any key to continue...");
                     default: break;
                 }
 
-                if (!ignoreComplete) Application.Run(Operation.Complete);
+                if (!ignoreComplete) Operation.OperationCompleted();
             }
 
             public static void CopyGameFiles(bool ignoreComplete = false)
@@ -512,7 +514,7 @@ Press any key to continue...");
 
                 Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\"));
 
-                if (!ignoreComplete) Application.Run(Operation.Complete);
+                if (!ignoreComplete) Operation.OperationCompleted();
             }
 
             public static void CopyGameFilesIndeterministic(bool ignoreComplete = false)
@@ -532,7 +534,7 @@ Press any key to continue...");
 
                 Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\"));
 
-                if (!ignoreComplete) Application.Run(Operation.Complete);
+                if (!ignoreComplete) Operation.OperationCompleted();
             }
 
             public static void FindAndExtractFile(bool ignoreComplete = false)
@@ -566,7 +568,7 @@ Press any key to continue...");
                                 if (!ignoreComplete)
                                 {
                                     Functions.Misc.UpdateStatus("Extracted file: " + file);
-                                    Application.Run(Operation.Complete);
+                                    Operation.OperationCompleted();
                                 }
                             }
                             catch (IOException fileErr)
@@ -591,7 +593,7 @@ Press any key to continue...");
                                 if (!ignoreComplete)
                                 {
                                     Functions.Misc.UpdateStatus("Extracted file: " + file);
-                                    Application.Run(Operation.Complete);
+                                    Operation.OperationCompleted();
                                 }
                             }
                             catch (IOException fileErr)
