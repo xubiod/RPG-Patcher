@@ -104,20 +104,18 @@ Press any key to continue...");
         public static class Operation
         {
             static Window Error = new Window("Error!");
-            static Label errorLabel = new Label("") { Height = Dim.Fill(1) };
+            static Label errorLabel = new Label("") { Height = Dim.Fill(1), Width = Dim.Fill(1) };
             static Button quitError = new Button("Close", true)
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(Error) - Pos.Y(Error) - 3,
-                //Clicked = () => { Error.Remove(errorLabel); Application.RequestStop(); }
+                Y = Pos.Bottom(Error) - Pos.Y(Error) - 3
             };
 
             public static Window Complete = new Window("Operation complete.");
             static Button quitComplete = new Button("Close", true)
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(Complete) - Pos.Y(Complete) - 3,
-                //Clicked = () => { Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
+                Y = Pos.Bottom(Complete) - Pos.Y(Complete) - 3
             };
 
             public static void Init()
@@ -137,22 +135,9 @@ Press any key to continue...");
                 Complete.X = Pos.Center();
                 Complete.Y = Pos.Center();
 
+                quitComplete.Clicked += () => { StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
+
                 Complete.Add(quitComplete);
-                #endregion
-
-                #region file info
-                Extract.AllFiles.ColorScheme = Program.ArchivedList;
-
-                Extract.AllFiles.Width = Dim.Percent(80);
-                Extract.AllFiles.Height = Dim.Percent(80);
-
-                Extract.AllFiles.X = Pos.Center();
-                Extract.AllFiles.Y = Pos.Center();
-
-                Extract.AllFiles.Add(Extract.infoLabel);
-                Extract.AllFiles.Add(Extract.allFilesNext);
-                Extract.AllFiles.Add(Extract.allFilesLast);
-                Extract.AllFiles.Add(Extract.quitAllFiles);
                 #endregion
 
                 #region error
@@ -169,6 +154,9 @@ Press any key to continue...");
 
                 Error.X = Pos.Center();
                 Error.Y = Pos.Center();
+                quitError.Clicked += () => { Error.Remove(errorLabel); Application.RequestStop(); };
+                Error.Add(errorLabel);
+                Error.Add(quitError);
                 #endregion
             }
 
@@ -271,31 +259,68 @@ Press any key to continue...");
             }
         }
 
-        public static class Extract
+        public class Extract
         {
-            public static Label  infoLabel =    new Label(1, 1, "a\na\na\na\na\na\na\na\na\na\na\na\na\na");
-            static int    location =     0;
-            static int    max =          1;
-            public static Window AllFiles =     new Window("Archived files");
-            public static Button quitAllFiles = new Button("Close", true)
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                //Clicked = () => { location = 0; Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
-            };
-            public static Button allFilesNext = new Button("Next", true)
-            {
-                X = Pos.Center() + 7,
-                Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                //Clicked = () => { location = (location + 1) % max; GetAllFiles(); }
-            };
-            public static Button allFilesLast = new Button("Last", true)
-            {
-                X = Pos.Center() - 18,
-                Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                //Clicked = () => { location = (location + max - 1) % max; GetAllFiles(); }
-            };
+            public Label  infoLabel =    new Label(1, 1, "a\na\na\na\na\na\na\na\na\na\na\na\na\na");
+            public static int    location =     0;
+            public static int    max =          1;
+            public Window AllFiles =     new Window("Archived files");
+            public Button quitAllFiles = new Button("Close", true);
+            public Button allFilesNext;
+            public Button allFilesLast;
             public static List<string> files =  new List<string>();
+
+            public Extract() => Init();
+
+            public Extract Init()
+            {
+                AllFiles.ColorScheme = Program.ArchivedList;
+
+                AllFiles.Width = Dim.Percent(80);
+                AllFiles.Height = Dim.Percent(80);
+
+                AllFiles.X = Pos.Center();
+                AllFiles.Y = Pos.Center();
+
+                SetupElements();
+
+                AllFiles.Add(infoLabel);
+                AllFiles.Add(allFilesNext);
+                AllFiles.Add(allFilesLast);
+                AllFiles.Add(quitAllFiles);
+
+                return this;
+            }
+
+            public void SetupElements()
+            {
+                infoLabel.Width = Dim.Fill(1);
+
+                quitAllFiles = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
+                    Width = Dim.Fill(1)
+                    //Clicked = () => { location = 0; Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
+                };
+                quitAllFiles.Clicked += () => { location = 0; StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
+
+                allFilesNext = new Button("Next", true)
+                {
+                    X = Pos.Center() + 7,
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
+                    //Clicked = () => { location = (location + 1) % max; GetAllFiles(); }
+                };
+                allFilesNext.Clicked += () => { location = (location + 1) % max; GetAllFiles(); };
+
+                allFilesLast = new Button("Last", true)
+                {
+                    X = Pos.Center() - 18,
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
+                    //Clicked = () => { location = (location + max - 1) % max; GetAllFiles(); }
+                };
+                allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(); };
+            }
 
             public static void GetAllFiles()
             {
@@ -361,10 +386,12 @@ Press any key to continue...");
 
                 infoText += "\n" + (location + 1).ToString() + " / " + max.ToString();
 
-                infoLabel.Text = infoText;
+                Extract extractWin = new Extract();
 
-                AllFiles.ColorScheme = Program.ArchivedList;
-                Application.Run(AllFiles);
+                extractWin.infoLabel.Text = infoText;
+
+                extractWin.AllFiles.ColorScheme = Program.ArchivedList;
+                Application.Run(extractWin.AllFiles);
             }
 
             public static void ExtractAllFiles(bool ignoreComplete = false)
