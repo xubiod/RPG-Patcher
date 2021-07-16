@@ -314,17 +314,19 @@ Press any key to continue...");
                     X = Pos.Center() + 7,
                     Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
-                allFilesNext.Clicked += () => { location = (location + 1) % max; GetAllFiles(); };
+                allFilesNext.Clicked += () => { location = (location + 1) % max; GetAllFiles(this); };
 
                 allFilesLast = new Button("Last", true)
                 {
                     X = Pos.Center() - 18,
                     Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
-                allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(); };
+                allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(this); };
             }
 
-            public static void GetAllFiles()
+            public static readonly int MaxNamesOnDisplay = 15;
+
+            public static void GetAllFiles(Extract useExtractObj = null)
             {
                 string path = Program.ProjectPath;
                 string infoText = "";
@@ -341,7 +343,7 @@ Press any key to continue...");
                         {
                             RGSSADv1 encrypted = new RGSSADv1(path);
 
-                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / 10);
+                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
                             int size = 0;
 
                             foreach (ArchivedFile file in encrypted.ArchivedFiles)
@@ -351,12 +353,12 @@ Press any key to continue...");
 
                             infoText = "Amount of files: " + encrypted.ArchivedFiles.Count + " (" + Misc.FileSize(size) + " total)\n\n";
 
-                            for (int q = location * 10; q < Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count); q++)
+                            for (int q = location * MaxNamesOnDisplay; q < Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
                             {
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
 
-                            Misc.UpdateStatus("Displaying files " + (location * 10 + 1) + " thru " + Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
+                            Misc.UpdateStatus("Displaying files " + (location * MaxNamesOnDisplay + 1) + " thru " + Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
 
                             encrypted.Dispose();
                             break;
@@ -365,7 +367,7 @@ Press any key to continue...");
                         {
                             RGSSADv3 encrypted = new RGSSADv3(path);
 
-                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / 10);
+                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
                             int size = 0;
 
                             foreach (ArchivedFile file in encrypted.ArchivedFiles)
@@ -375,7 +377,7 @@ Press any key to continue...");
 
                             infoText = "Amount of files: " + encrypted.ArchivedFiles.Count + " (" + Misc.FileSize(size) + " total)\n\n";
 
-                            for (int q = location * 10; q < Math.Min((location + 1) * 10, encrypted.ArchivedFiles.Count); q++)
+                            for (int q = location * MaxNamesOnDisplay; q < Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
                             {
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
@@ -388,12 +390,19 @@ Press any key to continue...");
 
                 infoText += "\n" + (location + 1).ToString() + " / " + max.ToString();
 
-                Extract extractWin = new Extract();
+                if (useExtractObj == null)
+                {
+                    Extract extractWin = new Extract();
 
-                extractWin.infoLabel.Text = infoText;
+                    extractWin.infoLabel.Text = infoText;
 
-                extractWin.AllFiles.ColorScheme = Program.ArchivedList;
-                Application.Run(extractWin.AllFiles);
+                    extractWin.AllFiles.ColorScheme = Program.ArchivedList;
+                    Application.Run(extractWin.AllFiles);
+                }
+                else
+                {
+                    useExtractObj.infoLabel.Text = infoText;
+                }
             }
 
             public static void ExtractAllFiles(bool ignoreComplete = false)
