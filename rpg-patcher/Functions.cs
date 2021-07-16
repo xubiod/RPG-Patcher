@@ -103,13 +103,8 @@ Press any key to continue...");
 
         public static class Operation
         {
-            static Window Error = new Window("Error!");
             static Label errorLabel = new Label("") { Height = Dim.Fill(1), Width = Dim.Fill(1) };
-            static Button quitError = new Button("Close", true)
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(Error) - Pos.Y(Error) - 3
-            };
+            static Button quitError;
 
             public static Window Complete = new Window("Operation complete.");
             static Button quitComplete = new Button("Close", true)
@@ -139,29 +134,34 @@ Press any key to continue...");
 
                 Complete.Add(quitComplete);
                 #endregion
-
-                #region error
-                Error.ColorScheme = new ColorScheme()
-                {
-                    Normal = TGAttribute.Make(Color.White, Color.BrightRed),
-                    Focus = TGAttribute.Make(Color.White, Color.BrightRed),
-                    HotNormal = TGAttribute.Make(Color.White, Color.BrightRed),
-                    HotFocus = TGAttribute.Make(Color.White, Color.BrightRed)
-                };
-
-                Error.Width = 50;
-                Error.Height = Dim.Percent(50);
-
-                Error.X = Pos.Center();
-                Error.Y = Pos.Center();
-                quitError.Clicked += () => { Error.Remove(errorLabel); Application.RequestStop(); };
-                Error.Add(errorLabel);
-                Error.Add(quitError);
-                #endregion
             }
 
             public static void ShowError(string issue)
             {
+                Window Error = new Window("Error!")
+                {
+                    ColorScheme = new ColorScheme()
+                    {
+                        Normal = TGAttribute.Make(Color.White, Color.BrightRed),
+                        Focus = TGAttribute.Make(Color.White, Color.BrightRed),
+                        HotNormal = TGAttribute.Make(Color.White, Color.BrightRed),
+                        HotFocus = TGAttribute.Make(Color.White, Color.BrightRed)
+                    },
+
+                    Width = 50,
+                    Height = Dim.Percent(50),
+
+                    X = Pos.Center(),
+                    Y = Pos.Center()
+                };
+
+                quitError = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(Error) - Pos.Y(Error) - 3
+                };
+                quitError.Clicked += () => { Error.Remove(errorLabel); Application.RequestStop(); };
+
                 errorLabel.Text = Regex.Replace(issue, "(.{46})", "$1\n");
                 errorLabel.X = 1;
                 errorLabel.Y = 1;
