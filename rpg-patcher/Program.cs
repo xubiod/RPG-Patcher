@@ -1,5 +1,6 @@
 ﻿using RPGMakerDecrypter.Decrypter;
 using System;
+using System.IO;
 using System.Linq;
 using Terminal.Gui;
 using TGAttribute = Terminal.Gui.Attribute;
@@ -102,7 +103,26 @@ namespace rpg_patcher
 
                 new MenuBarItem ("_Patching", new MenuItem [] {
                     new MenuItem ("_Working on it", "", () => {
-                        Functions.Operation.ShowError("Ok. You clicked on something that deliberately says \"Working on it\" and expect it to fucking do something? Are you fucking serious? How dense is your fucking brain to have something bounce clean off your goddamn eyes? Now fuck off and do something else.");
+                        Functions.Operation.ShowError("whoops");
+                    })
+                }),
+
+                new MenuBarItem ("_Special", new MenuItem [] {
+                    new MenuItem ("_RPG Maker 2000/03 Charset -> XP format", "", () => {
+                        string infile = "", outfile = "";
+
+                        Functions.FileDialog.CreateOpenDialog("Navigate to folder of RPG Maker 2000/03 charsets.", "", new string[] {"png"}, () => { infile = Functions.FileDialog._OpenDialog.FilePath.ToString(); });
+                        Functions.FileDialog.CreateSaveDialog("Where to put the converted charsets?", "", new string[] {"png"}, () => { outfile = Functions.FileDialog._SaveDialog.FilePath.ToString(); });
+
+                        Functions.Operation.RPGMaker2k.Convert2kCharsets(Path.GetDirectoryName(infile), Path.GetDirectoryName(outfile));
+                    }),
+                    new MenuItem ("_RPG Maker 2000/03 Chipset -> XP tileset", "", () => {
+                        string infile = "", outfile = "";
+
+                        Functions.FileDialog.CreateOpenDialog("Navigate to folder of RPG Maker 2000/03 chipsets.", "", new string[] {"png"}, () => { infile = Functions.FileDialog._OpenDialog.FilePath.ToString(); });
+                        Functions.FileDialog.CreateSaveDialog("Where to put the converted tilesets?", "", new string[] {"png"}, () => { outfile = Functions.FileDialog._SaveDialog.FilePath.ToString(); });
+
+                        Functions.Operation.RPGMaker2k.Convert2kChipsets(Path.GetDirectoryName(infile), Path.GetDirectoryName(outfile));
                     })
                 }),
 
