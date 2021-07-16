@@ -5,5 +5,8 @@ An in-development TUI application using .NET Core for managing RPG Maker XP/VX/V
 ## External Resources
 Uses a .NET Core port of [uuksu's RPGMakerDecrypter](https://github.com/uuksu/RPGMakerDecrypter/) which was compiled to a DLL, and [migueldeicaza's gui.cs](https://github.com/migueldeicaza/gui.cs) which was added via NuGet.
 
-## Note
-The .NET Core port of [uuksu's RPGMakerDecrypter](https://github.com/uuksu/RPGMakerDecrypter/) was compiled under the project name of `RPGMakerDecrypter.Decrypter.Core`, hence the name in the code.
+## Compilation
+### External Resources
+* [RPGMakerDecrypter](https://github.com/uuksu/RPGMakerDecrypter/)
+  - Was converted to .NET Core 2.1 LTS
+  - Converted project was named `RPGMakerDecrypter.Decrypter.Core`
