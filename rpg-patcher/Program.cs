@@ -34,13 +34,14 @@ namespace rpg_patcher
 
             //Application.Top.ColorScheme =
 
-            Theme(0);
+            Theme(User.Default.Theme);
 
             // menubar
             var menu = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
                     new MenuItem ("_About", "", () => {
-                        Application.Run(StaticWindows.About._window);
+                        StaticWindows.About about = new StaticWindows.About();
+                        Application.Run(about._window);
                     }),
                     new MenuItem ("_Focus on main window", "", () => {
                         //Application.Top.SetFocus(StaticWindows.Main._window);
@@ -80,7 +81,10 @@ namespace rpg_patcher
                         Functions.Extract.GetAllFiles();
                     }),
                     new MenuItem ("_Extract single file", "", () => {
-                        Functions.Operation.ExecuteIfProjectSelected(() => Application.Run(StaticWindows.ExportOneFile._window));
+                        Functions.Operation.ExecuteIfProjectSelected(() => {
+                            StaticWindows.ExportOneFile oneFile = new StaticWindows.ExportOneFile();
+                            Application.Run(oneFile._window);
+                        });
                     }),
                     new MenuItem ("_Extract everything", "", () => {
                         Functions.FileDialog.CreateSaveDialog("Save to...", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
@@ -104,7 +108,8 @@ namespace rpg_patcher
 
                 new MenuBarItem ("_Settings", new MenuItem [] {
                     new MenuItem ("_Open settings window", "", () => {
-                        Application.Run(StaticWindows.Settings._window);
+                        StaticWindows.Settings settings = new StaticWindows.Settings();
+                        Application.Run(settings._window);
                     })
                 })
             });
@@ -113,7 +118,8 @@ namespace rpg_patcher
             Application.Top.Add(menu, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Bottom(StaticWindows.Main._window) - 1 });
 
             // initalize static windows
-            StaticWindows.Create();
+            //StaticWindows.Create();
+            StaticWindows.Main.Init();
             Functions.Operation.Init();
 
             // run it
@@ -213,7 +219,7 @@ namespace rpg_patcher
                 default: { break; }
             }
 
-            StaticWindows.RefreshColors();
+            //StaticWindows.RefreshColors();
             Application.Refresh();
         }
 

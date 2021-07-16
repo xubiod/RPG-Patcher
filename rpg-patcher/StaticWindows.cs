@@ -11,37 +11,28 @@ namespace rpg_patcher
 {
     static class StaticWindows
     {
-        public static void Create()
+        public static class Globals
         {
-            About.Init();
-            Main.Init();
-            Settings.Init();
-            ExportOneFile.Init();
+            public static string ExportOneFileGet;
         }
 
-        public static void RefreshColors()
+        public class About
         {
-            About.RefreshColors();
-            Main.RefreshColors();
-            Settings.RefreshColors();
-            ExportOneFile.RefreshColors();
-        }
+            public About() => Init();
 
-        public static class About
-        {
-            public static Window _window = new Window("About");
+            public Window _window = new Window("About");
 
-            public static Window Init()
+            public Window Init()
             {
-                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
-
-                _window.Add(content);
-                _window.Width = content.Width + 4;
-                _window.Height = content.Height + 5;
-
                 _window.X = Pos.Center();
                 _window.Y = Pos.Center();
 
+                SetupElements();
+
+                _window.Width = content.Width + 4;
+                _window.Height = content.Height + 5;
+
+                _window.Add(content);
                 _window.Add(quit);
 
                 // _window.ColorScheme = Application.Top.ColorScheme;
@@ -49,42 +40,58 @@ namespace rpg_patcher
                 return _window;
             }
 
-            public static void RefreshColors()
+            private void SetupElements()
+            {
+                content = new Label("RPG Patcher\n\nDeveloped by xubiod 2019-2021\n\nTerminal.GUI (GUI.cs) was developed by migueldeicaza\n\nRPGMakerDecrypter was developed by uuksu\nPort to .NET Core by xubiod")
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Center()
+                };
+
+                quit = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                };
+
+                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+            }
+
+            public void RefreshColors()
             {
                 _window.ColorScheme = Colors.Base;
             }
 
-            static Label content = new Label("RPG Patcher\n\nDeveloped by xubiod 2019-2021\n\nTerminal.GUI (GUI.cs) was developed by migueldeicaza\n\nRPGMakerDecrypter was developed by uuksu\nPort to .NET Core by xubiod")
-            {
-                X = Pos.Center(),
-                Y = Pos.Center()
-            };
+            private Label content;
 
-            static Button quit = new Button("Close", true)
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
-            };
+            private Button quit;
         }
 
         public static class Main
         {
             public static Window _window = new Window("RPG Patcher");
 
-            public static void Init()
+            public static Window Init()
             {
                 _window.X = 0;
                 _window.Y = 1;
                 _window.Width = Dim.Fill();
                 _window.Height = Dim.Fill();
 
+                SetupElements();
+
+                _window.Add(_contents.ToArray());
+
+                return _window;
+            }
+
+            private static void SetupElements()
+            {
                 (_contents[0] as Button).Clicked += () => Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements);
                 (_contents[4] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles());
                 (_contents[6] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles());
                 (_contents[8] as Button).Clicked += () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
                 (_contents[10] as Button).Clicked += () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); };
-
-                _window.Add(_contents.ToArray());
             }
 
             public static void RefreshColors()
@@ -167,37 +174,54 @@ namespace rpg_patcher
             };
         }
 
-        public static class Settings
+        public class Settings
         {
-            public static Window _window = new Window("Settings");
+            public Window _window = new Window("Settings");
 
-            public static Window Init()
+            public Settings() => Init();
+
+            public Window Init()
             {
-                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { OverwriteFiles = x.SelectedItem == 0; };
-
-                _window.Add(content);
                 _window.Width = Dim.Percent(80);
                 _window.Height = Dim.Percent(80);
 
                 _window.X = Pos.Center();
                 _window.Y = Pos.Center();
 
-                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+                SetupElements();
 
+                _window.Add(content);
                 _window.Add(quit);
 
                 return _window;
             }
 
-            public static void RefreshColors()
+            private void SetupElements()
+            {
+                (content[1] as RadioGroup).SelectedItem = User.Default.BytePref;
+                (content[3] as RadioGroup).SelectedItem = User.Default.Theme;
+                (content[5] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
+
+                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { BytePref = x.SelectedItem; };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { OverwriteFiles = x.SelectedItem == 0; };
+
+                quit = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                };
+
+                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+            }
+
+            public void RefreshColors()
             {
                 _window.ColorScheme = Colors.Base;
             }
 
-            public static int BytePref = 0;
-            public static bool OverwriteFiles = true;
+            public int BytePref = 0;
+            public bool OverwriteFiles = true;
 
             static View[] content = {
                 new Label(1, 1, "Byte Representation"),
@@ -213,18 +237,15 @@ namespace rpg_patcher
                 new RadioGroup(2, 11, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0)
             };
 
-            static Button quit = new Button("Close", true)
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
-            };
+            static Button quit;
         }
 
-        public static class ExportOneFile
+        public class ExportOneFile
         {
-            public static Window _window = new Window("Export One File");
+            public Window _window = new Window("Export One File");
 
-            public static Window Init()
+            public ExportOneFile() => Init();
+            public Window Init()
             {
                 _window.Add(content);
                 _window.Width = Dim.Sized(52);
@@ -233,26 +254,39 @@ namespace rpg_patcher
                 _window.X = Pos.Center();
                 _window.Y = Pos.Center();
 
-                save.Clicked += () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()));
-                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+                SetupElements();
 
                 _window.Add(save, quit);
 
                 return _window;
             }
 
-            public static void RefreshColors()
+            private void SetupElements()
+            {
+                save.Clicked += () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()));
+
+                quit = new Button("Close", true)
+                {
+                    X = Pos.Center(),
+                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                };
+
+                quit.Clicked += () => { GetFile(); Main._window.SetFocus(); Application.RequestStop(); };
+            }
+
+            public void RefreshColors()
             {
                 _window.ColorScheme = Colors.Base;
             }
 
-            public static string GetFile()
+            public string GetFile()
             {
-                return (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as TextField ?? new TextField("x")).Id == "FileToExport") as TextField).Text.ToString();
+                Globals.ExportOneFileGet = (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as TextField ?? new TextField("x")).Id == "FileToExport") as TextField).Text.ToString();
+                return Globals.ExportOneFileGet;
             }
 
-            public static int BytePref = 0;
-            public static bool OverwriteFiles = true;
+            public int BytePref = 0;
+            public bool OverwriteFiles = true;
 
             static View[] content = {
                 new Label(1, 1, "File from Archive (list directory!)"),
@@ -269,11 +303,7 @@ namespace rpg_patcher
                 Y = Pos.At(4)
             };
 
-            static Button quit = new Button("Close", true)
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
-            };
+            static Button quit;
         }
     }
 }

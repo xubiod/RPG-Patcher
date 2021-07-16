@@ -23,19 +23,15 @@ namespace rpg_patcher
         {
             public static bool IsUpToDate()
             {
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "RPG Patcher-" + ThisAssembly.Git.Tag);
-                    using (var response = client.GetAsync("https://api.github.com/repos/xubiod/RPG-Patcher/commits").Result)
-                     {
-                        var json = response.Content.ReadAsStringAsync().Result;
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "RPG Patcher-" + ThisAssembly.Git.Tag);
+                using var response = client.GetAsync("https://api.github.com/repos/xubiod/RPG-Patcher/commits").Result;
+                var json = response.Content.ReadAsStringAsync().Result;
 
-                        dynamic commits = JArray.Parse(json);
-                        string lastCommit = commits[0].sha;
+                dynamic commits = JArray.Parse(json);
+                string lastCommit = commits[0].sha;
 
-                        return lastCommit == ThisAssembly.Git.Sha;
-                    }
-                }
+                return lastCommit == ThisAssembly.Git.Sha;
             }
 
             // https://stackoverflow.com/questions/16379143/check-if-application-is-installed-in-registry
@@ -390,7 +386,7 @@ Press any key to continue...");
                             try
                             {
                                 Misc.UpdateStatus("Extracting all files for a XP/VX archive...");
-                                encrypted.ExtractAllFiles(where, StaticWindows.Settings.OverwriteFiles);
+                                encrypted.ExtractAllFiles(where, User.Default.OverwriteFiles);
                             }
                             catch (IOException file)
                             {
@@ -405,7 +401,7 @@ Press any key to continue...");
                             try
                             {
                                 Misc.UpdateStatus("Extracting all files for a VX Ace archive...");
-                                encrypted.ExtractAllFiles(where, StaticWindows.Settings.OverwriteFiles);
+                                encrypted.ExtractAllFiles(where, User.Default.OverwriteFiles);
                             }
                             catch (IOException file)
                             {
@@ -466,7 +462,7 @@ Press any key to continue...");
             {
                 string path = Program.ProjectPath;
                 string where = Functions.FileDialog._SaveDialog.DirectoryPath.ToString();
-                string file = StaticWindows.ExportOneFile.GetFile();
+                string file = new StaticWindows.ExportOneFile().GetFile();
 
                 //WaitDialog.Width = 15;
                 //WaitDialog.Height = 3;
@@ -487,7 +483,7 @@ Press any key to continue...");
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
+                                    encrypted.ExtractFile(_result, where, User.Default.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
@@ -512,7 +508,7 @@ Press any key to continue...");
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, StaticWindows.Settings.OverwriteFiles);
+                                    encrypted.ExtractFile(_result, where, User.Default.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
@@ -663,7 +659,7 @@ Press any key to continue...");
         {
             public static string FileSize(int bytes)
             {
-                switch (StaticWindows.Settings.BytePref)
+                switch (User.Default.BytePref)
                 {
                     // kilobytes/megabytes
                     case 1:
