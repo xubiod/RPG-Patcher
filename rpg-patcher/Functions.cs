@@ -655,11 +655,11 @@ Press any key to continue...");
                             }
                             else if (bytes > 1024 && bytes < 1048576)
                             {
-                                return (Math.Floor(bytes / 10.24) / 100).ToString() + " KB";
+                                return (Math.Floor(bytes / 10.24) / 100).ToString() + " KiB";
                             }
                             else
                             {
-                                return (Math.Floor(bytes / 10485.76) / 100).ToString() + " MB";
+                                return (Math.Floor(bytes / 10485.76) / 100).ToString() + " MiB";
                             }
                         }
                 }
