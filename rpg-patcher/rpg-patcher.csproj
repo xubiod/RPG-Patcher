@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <Reference Include="RPGMakerDecrypter.Decrypter.Core">
-      <HintPath>G:\Remote Projects\RPGMakerDecrypter\RPGMakerDecrypter.Decrypter.Core\bin\Debug\netcoreapp2.1\RPGMakerDecrypter.Decrypter.Core.dll</HintPath>
+      <HintPath>..\..\RPGMakerDecrypter\RPGMakerDecrypter.Decrypter.Core\bin\Debug\netcoreapp2.1\RPGMakerDecrypter.Decrypter.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 

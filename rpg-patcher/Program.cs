@@ -32,7 +32,7 @@ namespace rpg_patcher
             // initalize terminal.gui
             Application.Init();
 
-            //Application.Top.ColorScheme = 
+            //Application.Top.ColorScheme =
 
             Theme(0);
 
