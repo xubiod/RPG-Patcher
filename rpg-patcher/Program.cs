@@ -43,7 +43,8 @@ namespace rpg_patcher
                         Application.Run(StaticWindows.About._window);
                     }),
                     new MenuItem ("_Focus on main window", "", () => {
-                        Application.Top.SetFocus(StaticWindows.Main._window);
+                        //Application.Top.SetFocus(StaticWindows.Main._window);
+                        StaticWindows.Main._window.SetFocus();
                     }),
                     new MenuItem ("_Quit", "", () => {
                         Application.RequestStop();
@@ -133,7 +134,7 @@ namespace rpg_patcher
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
-                            HotFocus = TGAttribute.Make(Color.BrighCyan, Color.Blue)
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
                         Colors.Menu = new ColorScheme()
@@ -141,7 +142,7 @@ namespace rpg_patcher
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
                             HotNormal = TGAttribute.Make(Color.DarkGray, Color.Gray),
-                            HotFocus = TGAttribute.Make(Color.BrighCyan, Color.Blue)
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
                         Colors.Dialog = new ColorScheme()
@@ -149,7 +150,7 @@ namespace rpg_patcher
                             Normal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
                             HotNormal = TGAttribute.Make(Color.Blue, Color.White),
-                            HotFocus = TGAttribute.Make(Color.BrighCyan, Color.Blue)
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
                         ArchivedList = new ColorScheme()
@@ -183,7 +184,7 @@ namespace rpg_patcher
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
                             HotNormal = TGAttribute.Make(Color.DarkGray, Color.Gray),
-                            HotFocus = TGAttribute.Make(Color.BrighCyan, Color.Blue)
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
                         Colors.Dialog = new ColorScheme()

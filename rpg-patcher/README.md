@@ -10,3 +10,7 @@ Uses a .NET Core port of [uuksu's RPGMakerDecrypter](https://github.com/uuksu/RP
 * [RPGMakerDecrypter](https://github.com/uuksu/RPGMakerDecrypter/)
   - Was converted to .NET Core 2.1 LTS
   - Converted project was named `RPGMakerDecrypter.Decrypter.Core`
+
+* [RM2k2XP.NETCore](https://github.com/xubiod/RM2k2XP.NETCore)
+  - Was forked from [uuksu's RM2k2XP](https://github.com/uuksu/RM2k2XP) to add a .NET Core 3.1 project
+  - Uses `RM2k2XP.NETCore.Converters`

@@ -113,7 +113,7 @@ Press any key to continue...");
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(Error) - Pos.Y(Error) - 3,
-                Clicked = () => { Error.Remove(errorLabel); Application.RequestStop(); }
+                //Clicked = () => { Error.Remove(errorLabel); Application.RequestStop(); }
             };
 
             public static Window Complete = new Window("Operation complete.");
@@ -121,7 +121,7 @@ Press any key to continue...");
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(Complete) - Pos.Y(Complete) - 3,
-                Clicked = () => { Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
+                //Clicked = () => { Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
             };
 
             public static void Init()
@@ -159,7 +159,7 @@ Press any key to continue...");
                 Extract.AllFiles.Add(Extract.quitAllFiles);
                 #endregion
 
-                #region error 
+                #region error
                 Error.ColorScheme = new ColorScheme()
                 {
                     Normal = TGAttribute.Make(Color.White, Color.BrightRed),
@@ -285,19 +285,19 @@ Press any key to continue...");
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                Clicked = () => { location = 0; Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
+                //Clicked = () => { location = 0; Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
             };
             public static Button allFilesNext = new Button("Next", true)
             {
                 X = Pos.Center() + 7,
                 Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                Clicked = () => { location = (location + 1) % max; GetAllFiles(); }
+                //Clicked = () => { location = (location + 1) % max; GetAllFiles(); }
             };
             public static Button allFilesLast = new Button("Last", true)
             {
                 X = Pos.Center() - 18,
                 Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                Clicked = () => { location = (location + max - 1) % max; GetAllFiles(); }
+                //Clicked = () => { location = (location + max - 1) % max; GetAllFiles(); }
             };
             public static List<string> files =  new List<string>();
 
@@ -548,10 +548,13 @@ Press any key to continue...");
                 _OpenDialog.ColorScheme = Colors.Dialog;
 
                 _OpenDialog.AllowedFileTypes = allowed_file_types;
-                _OpenDialog.AddButton(new Button("Set Dir...") { Clicked = () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } } });
+
+                var setdir = new Button("Set Dir...");
+                setdir.Clicked += () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
+                _OpenDialog.AddButton(setdir);
 
                 (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Open") as Button).Clicked += callback;
-                (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.SetFocus(Application.Top.MostFocused);
+                (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
 
                 Application.Run(_OpenDialog);
             }
@@ -566,11 +569,14 @@ Press any key to continue...");
                 _SaveDialog.ColorScheme = Colors.Dialog;
 
                 _SaveDialog.AllowedFileTypes = allowed_file_types;
-                _SaveDialog.AddButton(new Button("Set Dir...") { Clicked = () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } } });
+
+                var setdir = new Button("Set Dir...");
+                setdir.Clicked += () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
+                _OpenDialog.AddButton(setdir);
 
                 (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += () => callback();
 
-                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.SetFocus(Application.Top.MostFocused);
+                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
 
                 Application.Run(_SaveDialog);
             }
@@ -578,16 +584,16 @@ Press any key to continue...");
 
         public static class Encryption
         {
-            /* 
+            /*
              * ---===--- current knowledge ---===---
-             * 
+             *
              * it is xor encryption
-             * 
+             *
              * here's the rpgmaker xp/vx encryption key
              * RPGMakerDecrypter.Decrypter.Constants.RGASSADv1Key
-             * 
+             *
              * rpgmaker vx ace's key seems to be determined by the file
-             * 
+             *
              * xor encryption/decryption is the same thing both ways
              */
 
