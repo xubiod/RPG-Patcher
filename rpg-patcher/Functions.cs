@@ -12,12 +12,13 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.Net.Http;
+using RM2k2XP.Converters;
 
 namespace rpg_patcher
 {
     static class Functions
     {
-        public static string RNDString = "01990849ca73d97c358aa63409043a93";
+        public const string RNDString = "01990849ca73d97c358aa63409043a93";
 
         public static class Checks
         {
@@ -197,6 +198,44 @@ Press any key to continue...");
                 } catch (Exception ex) {
                     Application.RequestStop();
                     ShowError(ex.Message);
+                }
+            }
+
+            public static class RPGMaker2k {
+
+                public static void Convert2kCharsets(string pathToCharsets, string output)
+                {
+                    RPGMaker2000CharsetConverter converter = new RPGMaker2000CharsetConverter();
+
+                    List<string> allCharsets = Directory.EnumerateFiles(pathToCharsets).ToList<string>();
+                    List<RM2k2XP.Converters.Formats.RPGMakerXPCharset> results;
+                    int i;
+                    string outfile;
+
+                    foreach (string filename in allCharsets)
+                    {
+                        results = converter.ToRPGMakerXpCharset(filename);
+                        for (i = 0; i < results.Count; i++)
+                        {
+                            outfile = $"{output}\\{Path.GetFileNameWithoutExtension(filename)}_{i}";
+                            results[i].Save(outfile);
+                        }
+                    }
+                }
+
+                public static void Convert2kChipsets(string pathToChipsets, string output)
+                {
+                    RPGMaker2000ChipsetConverter converter = new RPGMaker2000ChipsetConverter();
+
+                    List<string> allChipsets = Directory.EnumerateFiles(pathToChipsets).ToList<string>();
+                    RM2k2XP.Converters.Formats.RPGMakerXPTileset results;
+                    int i;
+
+                    foreach (string filename in allChipsets)
+                    {
+                        results = converter.ToRPGMakerXpTileset(filename);
+                        results.SaveAll($"{Path.GetFileNameWithoutExtension(filename)}", $"{output}\\");
+                    }
                 }
             }
         }
