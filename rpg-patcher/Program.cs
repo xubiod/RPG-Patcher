@@ -108,7 +108,7 @@ namespace rpg_patcher
                 }),
 
                 new MenuBarItem ("_Special", new MenuItem [] {
-                    new MenuItem ("_RPG Maker 2000/03 Charset -> XP format", "", () => {
+                    new MenuItem ("_RPG Maker 2000/03 Charset -> XP format (entire folder)", "", () => {
                         string infile = "", outfile = "";
 
                         Functions.FileDialog.CreateOpenDialog("Navigate to folder of RPG Maker 2000/03 charsets.", "", new string[] {"png"}, () => { infile = Functions.FileDialog._OpenDialog.FilePath.ToString(); });
@@ -116,7 +116,7 @@ namespace rpg_patcher
 
                         Functions.Operation.RPGMaker2k.Convert2kCharsets(Path.GetDirectoryName(infile), Path.GetDirectoryName(outfile));
                     }),
-                    new MenuItem ("_RPG Maker 2000/03 Chipset -> XP tileset", "", () => {
+                    new MenuItem ("_RPG Maker 2000/03 Chipset -> XP tileset (entire folder)", "", () => {
                         string infile = "", outfile = "";
 
                         Functions.FileDialog.CreateOpenDialog("Navigate to folder of RPG Maker 2000/03 chipsets.", "", new string[] {"png"}, () => { infile = Functions.FileDialog._OpenDialog.FilePath.ToString(); });
