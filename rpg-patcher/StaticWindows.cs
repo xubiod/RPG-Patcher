@@ -42,7 +42,7 @@ namespace rpg_patcher
 
             private void SetupElements()
             {
-                content = new Label($"RPG Patcher (patch {ThisAssembly.Git.Commit})\n\nDeveloped by xubiod 2019-2021\n\nTerminal.GUI (GUI.cs) was developed by migueldeicaza\n\nRPGMakerDecrypter was developed by uuksu\nPort to .NET Core by xubiod")
+                content = new Label($"RPG Patcher (patch {ThisAssembly.Git.Commit})\n\nDeveloped by xubiod 2019-2021\n\nFor full external resource credit, please visit the repo page.\n{ThisAssembly.Git.RepositoryUrl}")
                 {
                     X = Pos.Center(),
                     Y = Pos.Center()
