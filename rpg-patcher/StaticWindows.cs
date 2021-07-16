@@ -54,7 +54,7 @@ namespace rpg_patcher
                 _window.ColorScheme = Colors.Base;
             }
 
-            static Label content = new Label("RPG Patcher\n\nDeveloped by xubiod 2019\n\nTerminal.GUI (GUI.cs) was developed by migueldeicaza\n\nRPGMakerDecrypter was developed by uuksu\nPort to .NET Core by xubiod")
+            static Label content = new Label("RPG Patcher\n\nDeveloped by xubiod 2019-2021\n\nTerminal.GUI (GUI.cs) was developed by migueldeicaza\n\nRPGMakerDecrypter was developed by uuksu\nPort to .NET Core by xubiod")
             {
                 X = Pos.Center(),
                 Y = Pos.Center()
