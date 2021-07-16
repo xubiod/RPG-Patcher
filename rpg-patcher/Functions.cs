@@ -261,11 +261,11 @@ Press any key to continue...");
 
         public class Extract
         {
-            public Label  infoLabel =    new Label(1, 1, "a\na\na\na\na\na\na\na\na\na\na\na\na\na");
+            public Label infoLabel;
             public static int    location =     0;
             public static int    max =          1;
             public Window AllFiles =     new Window("Archived files");
-            public Button quitAllFiles = new Button("Close", true);
+            public Button quitAllFiles;
             public Button allFilesNext;
             public Button allFilesLast;
             public static List<string> files =  new List<string>();
@@ -294,30 +294,32 @@ Press any key to continue...");
 
             public void SetupElements()
             {
-                infoLabel.Width = Dim.Fill(1);
+                infoLabel = new Label()
+                {
+                    X = Pos.Left(AllFiles),
+                    Y = Pos.Top(AllFiles),
+                    Width = Dim.Fill(1),
+                    Height = Dim.Fill(3)
+                };
 
                 quitAllFiles = new Button("Close", true)
                 {
                     X = Pos.Center(),
-                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                    Width = Dim.Fill(1)
-                    //Clicked = () => { location = 0; Application.Top.SetFocus(StaticWindows.Main._window); Application.RequestStop(); }
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
                 quitAllFiles.Clicked += () => { location = 0; StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
 
                 allFilesNext = new Button("Next", true)
                 {
                     X = Pos.Center() + 7,
-                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                    //Clicked = () => { location = (location + 1) % max; GetAllFiles(); }
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
                 allFilesNext.Clicked += () => { location = (location + 1) % max; GetAllFiles(); };
 
                 allFilesLast = new Button("Last", true)
                 {
                     X = Pos.Center() - 18,
-                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3,
-                    //Clicked = () => { location = (location + max - 1) % max; GetAllFiles(); }
+                    Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
                 allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(); };
             }
