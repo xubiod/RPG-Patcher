@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NStack;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
@@ -20,6 +22,20 @@ namespace rpg_patcher
         {
             { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }
         };
+
+        public static ustring[] ThemeNamesAsUstringArray()
+        {
+            ustring[] results = new ustring[Themes.Keys.Count];
+            string[] tmp = Themes.Keys.ToArray();
+            int i;
+
+            for (i = 0; i < Themes.Count; i++)
+            {
+                results[i] = ustring.Make(tmp[i] + (i == 0 ? " (default)" : ""));
+            }
+
+            return results;
+        }
 
         public static void Theme(string name)
         {
