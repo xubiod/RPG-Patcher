@@ -126,7 +126,7 @@ namespace rpg_patcher
                     X = Pos.At(2),
                     Y = Pos.At(7)
                 },
-                new Button("Show Info", true)
+                new Button("Show Info")
                 {
                     X = Pos.At(3),
                     Y = Pos.At(9)
@@ -136,7 +136,7 @@ namespace rpg_patcher
                     X = Pos.At(23),
                     Y = Pos.At(9)
                 },
-                new Button("Copy Files", true)
+                new Button("Copy Files")
                 {
                     X = Pos.At(3),
                     Y = Pos.At(11)
@@ -146,7 +146,7 @@ namespace rpg_patcher
                     X = Pos.At(23),
                     Y = Pos.At(11)
                 },
-                new Button("Extract All", true)
+                new Button("Extract All")
                 {
                     X = Pos.At(3),
                     Y = Pos.At(13)
@@ -156,7 +156,7 @@ namespace rpg_patcher
                     X = Pos.At(23),
                     Y = Pos.At(13)
                 },
-                new Button("Make Project", true)
+                new Button("Make Project")
                 {
                     X = Pos.At(3),
                     Y = Pos.At(15)
