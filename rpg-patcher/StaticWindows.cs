@@ -202,9 +202,9 @@ namespace rpg_patcher
                 (content[3] as RadioGroup).SelectedItem = User.Default.Theme;
                 (content[5] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
 
-                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { OverwriteFiles = x.SelectedItem == 0; };
+                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.BytePref = x.SelectedItem; };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); RefreshColors(); };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
 
                 quit = new Button("Close", true)
                 {
@@ -228,7 +228,7 @@ namespace rpg_patcher
 
                 new RadioGroup(2, 2, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
 
-                new Label(1, 6, "Theme (updates background window)"),
+                new Label(1, 6, "Theme"),
 
                 new RadioGroup(2, 7, new NStack.ustring[] {"Dark (Default)", "Light"}, 0),
 
