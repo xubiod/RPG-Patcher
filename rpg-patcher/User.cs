@@ -10,7 +10,7 @@ namespace rpg_patcher
         {
             public static int BytePref;
             public static int Theme;
-            public static bool OverwriteFiles;
+            public static bool OverwriteFiles = true;
         }
     }
 }
