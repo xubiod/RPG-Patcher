@@ -17,11 +17,11 @@ namespace rpg_patcher
         public const int Theme_Dark = 0;
         public const int Theme_Light = 1;
         public const int Theme_OldBSOD = 2;
-        public const int Theme_Hacker = 3;
+        public const int Theme_Terminal = 3;
 
         public static readonly Dictionary<string, int> Themes = new Dictionary<string, int>()
         {
-            { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }, { "Hacker", Theme_Hacker }
+            { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }, { "Terminal", Theme_Terminal }
         };
 
         public static ustring[] ThemeNamesAsUstringArray()
@@ -171,7 +171,7 @@ namespace rpg_patcher
                         break;
                     }
 
-                case Theme_Hacker:
+                case Theme_Terminal:
                     {
                         Colors.Base = new ColorScheme()
                         {
