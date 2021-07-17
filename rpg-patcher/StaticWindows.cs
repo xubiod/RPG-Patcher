@@ -182,7 +182,7 @@ namespace rpg_patcher
 
             public Window Init()
             {
-                _window.Width = Dim.Percent(80);
+                _window.Width = Dim.Percent(50);
                 _window.Height = Dim.Percent(80);
 
                 _window.X = Pos.Center();
