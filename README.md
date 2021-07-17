@@ -1,5 +1,7 @@
 # RPG-Patcher
-An in-development TUI application using .NET Core for managing RPG Maker XP/VX/VX Ace projects and mods. 
+An in-development TUI application using .NET Core for managing RPG Maker XP/VX/VX Ace projects and archives.
+
+The application is more like a compilation of more tools into one application.
 
 
 ## External Resources
