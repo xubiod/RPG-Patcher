@@ -17,10 +17,11 @@ namespace rpg_patcher
         public const int Theme_Dark = 0;
         public const int Theme_Light = 1;
         public const int Theme_OldBSOD = 2;
+        public const int Theme_Hacker = 3;
 
         public static readonly Dictionary<string, int> Themes = new Dictionary<string, int>()
         {
-            { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }
+            { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }, { "Hacker", Theme_Hacker }
         };
 
         public static ustring[] ThemeNamesAsUstringArray()
@@ -134,25 +135,25 @@ namespace rpg_patcher
                         Colors.Base = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            Focus = TGAttribute.Make(Color.Blue, Color.Gray),
                             HotNormal = TGAttribute.Make(Color.Blue, Color.Gray),
-                            Focus = TGAttribute.Make(Color.Gray, Color.Blue),
-                            HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
+                            HotFocus = TGAttribute.Make(Color.Gray, Color.Blue)
                         };
 
                         Colors.Menu = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
-                            Focus = TGAttribute.Make(Color.Gray, Color.Gray),
+                            Focus = TGAttribute.Make(Color.Blue, Color.Gray),
                             HotNormal = TGAttribute.Make(Color.Gray, Color.Blue),
-                            HotFocus = TGAttribute.Make(Color.Gray, Color.Gray)
+                            HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
                         };
 
                         Colors.Dialog = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
-                            Focus = TGAttribute.Make(Color.Gray, Color.Gray),
+                            Focus = TGAttribute.Make(Color.Blue, Color.Gray),
                             HotNormal = TGAttribute.Make(Color.Gray, Color.Blue),
-                            HotFocus = TGAttribute.Make(Color.Gray, Color.Gray)
+                            HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
                         };
 
                         ArchivedList = new ColorScheme()
@@ -166,6 +167,47 @@ namespace rpg_patcher
                         HighlighedLabel = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Blue)
+                        };
+                        break;
+                    }
+
+                case Theme_Hacker:
+                    {
+                        Colors.Base = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
+                            HotNormal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
+                        };
+
+                        Colors.Menu = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
+                            HotNormal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
+                        };
+
+                        Colors.Dialog = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
+                            HotNormal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
+                            HotNormal = TGAttribute.Make(Color.BrightGreen, Color.Black),
+                            HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
                         break;
                     }
