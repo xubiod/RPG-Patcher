@@ -199,12 +199,12 @@ namespace rpg_patcher
             private void SetupElements()
             {
                 (content[1] as RadioGroup).SelectedItem = User.Default.BytePref;
-                (content[3] as RadioGroup).SelectedItem = User.Default.Theme;
-                (content[5] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
+                (content[3] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
+                (content[5] as RadioGroup).SelectedItem = User.Default.Theme;
 
                 (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
 
                 quit = new Button("Close", true)
                 {
@@ -228,13 +228,13 @@ namespace rpg_patcher
 
                 new RadioGroup(2, 2, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
 
-                new Label(1, 6, "Theme"),
+                new Label(1, 6, "File Behaviour"),
 
-                new RadioGroup(2, 7, Style.ThemeNamesAsUstringArray(), 0),
+                new RadioGroup(2, 7, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0),
 
-                new Label(1, 10, "File Behaviour"),
+                new Label(1, 10, "Theme"),
 
-                new RadioGroup(2, 11, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0)
+                new RadioGroup(2, 11, Style.ThemeNamesAsUstringArray(), 0)
             };
 
             static Button quit;
