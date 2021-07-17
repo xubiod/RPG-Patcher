@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Terminal.Gui;
 using TGAttribute = Terminal.Gui.Attribute;
 
@@ -235,12 +236,55 @@ namespace rpg_patcher
                         break;
                     }
 
+                case 2:
+                    {
+                        Colors.Base = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.Blue, Color.Gray),
+                            Focus = TGAttribute.Make(Color.Gray, Color.Blue),
+                            HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
+                        };
+
+                        Colors.Menu = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            Focus = TGAttribute.Make(Color.Gray, Color.Gray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            HotFocus = TGAttribute.Make(Color.Gray, Color.Gray)
+                        };
+
+                        Colors.Dialog = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            Focus = TGAttribute.Make(Color.Gray, Color.Gray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.Blue),
+                            HotFocus = TGAttribute.Make(Color.Gray, Color.Gray)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Blue, Color.Gray),
+                            Focus = TGAttribute.Make(Color.Gray, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.Blue, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.Gray, Color.Blue)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Blue)
+                        };
+                        break;
+                    }
+
                 default: { break; }
             }
 
             //StaticWindows.RefreshColors();
-            Application.Refresh();
             StaticWindows.Main.RefreshColors();
+            User.Default.Theme = mode;
+
+            Task.Delay(50).ContinueWith(t => { Application.Refresh(); });
         }
 
         public static void UpdateElements()

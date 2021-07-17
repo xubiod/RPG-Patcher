@@ -230,7 +230,7 @@ namespace rpg_patcher
 
                 new Label(1, 6, "Theme"),
 
-                new RadioGroup(2, 7, new NStack.ustring[] {"Dark (Default)", "Light"}, 0),
+                new RadioGroup(2, 7, new NStack.ustring[] {"Dark (Default)", "Light", "Old BIOS"}, 0),
 
                 new Label(1, 10, "File Behaviour"),
 
