@@ -314,7 +314,7 @@ Press any key to continue...");
 
             public Extract Init()
             {
-                AllFiles.ColorScheme = Program.ArchivedList;
+                AllFiles.ColorScheme = Style.ArchivedList;
 
                 AllFiles.Width = Dim.Percent(80);
                 AllFiles.Height = Dim.Percent(80);
@@ -436,7 +436,7 @@ Press any key to continue...");
 
                     extractWin.infoLabel.Text = infoText;
 
-                    extractWin.AllFiles.ColorScheme = Program.ArchivedList;
+                    extractWin.AllFiles.ColorScheme = Style.ArchivedList;
                     Application.Run(extractWin.AllFiles);
                 }
                 else

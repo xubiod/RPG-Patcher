@@ -98,7 +98,7 @@ namespace rpg_patcher
             {
                 _window.ColorScheme = Colors.Base;
 
-                if (_window.Subviews.First().Subviews.Count != 0) _window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString").ColorScheme = Program.HighlighedLabel;
+                if (_window.Subviews.First().Subviews.Count != 0) _window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString").ColorScheme = Style.HighlighedLabel;
             }
 
             static List<View> _contents = new List<View>()
@@ -118,7 +118,7 @@ namespace rpg_patcher
                     X = Pos.At(2),
                     Y = Pos.At(4),
                     Id = "ProjectString",
-                    ColorScheme = Program.HighlighedLabel,
+                    ColorScheme = Style.HighlighedLabel,
                     Width = 64
                 },
                 new Label("Here's some of the more common actions you can do:")
@@ -203,7 +203,7 @@ namespace rpg_patcher
                 (content[5] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
 
                 (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Program.Theme(x.SelectedItem); RefreshColors(); };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
                 (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
 
                 quit = new Button("Close", true)
