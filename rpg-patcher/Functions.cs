@@ -147,6 +147,23 @@ namespace rpg_patcher
                 Application.Run(Error);
             }
 
+            public static string VersionInstalled(RPGMakerVersion version)
+            {
+                const string installed = "(installed on system)";
+                const string not_installed = "(not installed on system)";
+                bool result;
+
+                switch (version)
+                {
+                    case RPGMakerVersion.Xp: { result = Checks.Installed.XP; break; }
+                    case RPGMakerVersion.Vx: { result = Checks.Installed.VX; break; }
+                    case RPGMakerVersion.VxAce: { result = Checks.Installed.VXAce; break; }
+                    default: { result = false; break; }
+                }
+
+                return result ? installed : not_installed;
+            }
+
             public static string GetVersion(string input)
             {
                 RPGMakerVersion _version = RGSSAD.GetVersion(input);

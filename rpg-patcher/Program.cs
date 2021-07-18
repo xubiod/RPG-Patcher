@@ -148,7 +148,7 @@ namespace rpg_patcher
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
             ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
 
-            (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = "Project: " + ProjectPath + "\nVersion: " + Functions.Operation.GetVersion(ProjectPath);
+            (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = $"Project: {ProjectPath}\nVersion: {Functions.Operation.GetVersion(ProjectPath)} {Functions.Operation.VersionInstalled(RGSSAD.GetVersion(ProjectPath))}";
 
             //(StaticWindows.Main._window.Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
         }
