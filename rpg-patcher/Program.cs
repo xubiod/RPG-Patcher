@@ -160,7 +160,18 @@ namespace rpg_patcher
             if (!forceNoOpen) ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
             if (Settings.Values.PersistentProject) File.WriteAllText("project", ProjectPath);
 
-            (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = $"Project: {ProjectPath}\nVersion: {Functions.Operation.GetVersion(ProjectPath)} {Functions.Operation.VersionInstalled(RGSSAD.GetVersion(ProjectPath))}";
+            string project = "No project loaded.";
+
+            string version = "N/A";
+
+            if (!String.IsNullOrEmpty(ProjectPath))
+            {
+                project = ProjectPath;
+                string obtainedVersion = Functions.Operation.GetVersion(ProjectPath);
+                version = obtainedVersion != null ? ($"{obtainedVersion} {Functions.Operation.VersionInstalled(RGSSAD.GetVersion(ProjectPath))}") : version;
+            }
+
+            (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = $"Project: {project}\nVersion: {version}";
 
             //(StaticWindows.Main._window.Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
         }
