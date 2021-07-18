@@ -102,7 +102,7 @@ namespace rpg_patcher
                     }),
                 }),
 
-                new MenuBarItem ("_Patching", new MenuItem [] {
+                new MenuBarItem ("_Modding", new MenuItem [] {
                     new MenuItem ("_Working on it", "", () => {
                         Functions.Operation.ShowError("whoops");
                     })
