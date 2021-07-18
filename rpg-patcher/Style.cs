@@ -428,7 +428,7 @@ namespace rpg_patcher
             //StaticWindows.RefreshColors();
             StaticWindows.Main.RefreshColors();
             if (Program.mainMenuBar != null) Program.mainMenuBar.ColorScheme = Colors.Menu;
-            User.Default.Theme = mode;
+            Settings.Values.Theme = mode;
 
             Application.Refresh();
         }

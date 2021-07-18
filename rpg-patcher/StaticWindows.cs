@@ -198,14 +198,14 @@ namespace rpg_patcher
 
             private void SetupElements()
             {
-                (content[1] as RadioGroup).SelectedItem = User.Default.BytePref;
-                (content[3] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
-                (content[5] as RadioGroup).SelectedItem = User.Default.PersistentProject ? 1 : 0;
-                (content[7] as RadioGroup).SelectedItem = User.Default.Theme;
+                (content[1] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.BytePref;
+                (content[3] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.OverwriteFiles ? 0 : 1;
+                (content[5] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.PersistentProject ? 1 : 0;
+                (content[7] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.Theme;
 
-                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.PersistentProject = x.SelectedItem == 1; };
+                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.BytePref = x.SelectedItem; };
+                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.OverwriteFiles = x.SelectedItem == 0; };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.PersistentProject = x.SelectedItem == 1; };
                 (content[7] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
 
                 quit = new Button("Close", true)
@@ -214,7 +214,7 @@ namespace rpg_patcher
                     Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
                 };
 
-                quit.Clicked += () => { User.Save("settings"); Main._window.SetFocus(); Application.RequestStop(); };
+                quit.Clicked += () => { rpg_patcher.Settings.Save("settings"); Main._window.SetFocus(); Application.RequestStop(); };
 
                 scrollBarView.X = 0;
                 scrollBarView.Y = 0;

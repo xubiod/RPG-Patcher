@@ -15,8 +15,8 @@ namespace rpg_patcher
 
         private static void Preload()
         {
-            User.Load("settings");
-            if (User.Default.PersistentProject) ProjectPath = File.ReadAllText("project");
+            Settings.Load("settings");
+            if (Settings.Values.PersistentProject) ProjectPath = File.ReadAllText("project");
 
             Functions.Checks.CheckForRPGMaker();
         }
@@ -30,7 +30,7 @@ namespace rpg_patcher
 
             //Application.Top.ColorScheme =
 
-            Style.Theme(User.Default.Theme);
+            Style.Theme(Settings.Values.Theme);
 
             // menubar
             mainMenuBar = new MenuBar(new MenuBarItem[] {
@@ -158,7 +158,7 @@ namespace rpg_patcher
         {
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
             if (!forceNoOpen) ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
-            if (User.Default.PersistentProject) File.WriteAllText("project", ProjectPath);
+            if (Settings.Values.PersistentProject) File.WriteAllText("project", ProjectPath);
 
             (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = $"Project: {ProjectPath}\nVersion: {Functions.Operation.GetVersion(ProjectPath)} {Functions.Operation.VersionInstalled(RGSSAD.GetVersion(ProjectPath))}";
 

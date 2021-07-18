@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace rpg_patcher
 {
-    public static class User
+    public static class Settings
     {
-        public static class Default
+        public static class Values
         {
             public static int BytePref;
             public static int Theme;
@@ -22,10 +22,10 @@ namespace rpg_patcher
         public static void Save(string filename)
         {
             int index = 0;
-            int size = sizeof(int) * Default.Count;
+            int size = sizeof(int) * Values.Count;
             byte[] data = new byte[size];
             byte[] bufferIn;
-            int[] allToBuffer = { Default.BytePref, Default.Theme, Convert.ToInt32(Default.OverwriteFiles), Convert.ToInt32(Default.PersistentProject) };
+            int[] allToBuffer = { Values.BytePref, Values.Theme, Convert.ToInt32(Values.OverwriteFiles), Convert.ToInt32(Values.PersistentProject) };
 
             for (int i = 0; i < allToBuffer.Length; i++)
             {
@@ -46,19 +46,19 @@ namespace rpg_patcher
                 byte[] bufferOut = new byte[sizeof(int)];
 
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Default.BytePref = BitConverter.ToInt32(bufferOut, 0);
+                Values.BytePref = BitConverter.ToInt32(bufferOut, 0);
                 index += sizeof(int);
 
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Default.Theme = BitConverter.ToInt32(bufferOut, 0);
+                Values.Theme = BitConverter.ToInt32(bufferOut, 0);
                 index += sizeof(int);
 
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Default.OverwriteFiles = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
+                Values.OverwriteFiles = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
                 index += sizeof(int);
 
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Default.PersistentProject = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
+                Values.PersistentProject = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
             }
             catch
             {

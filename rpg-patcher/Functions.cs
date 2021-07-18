@@ -474,7 +474,7 @@ namespace rpg_patcher
                             try
                             {
                                 Misc.UpdateStatus("Extracting all files for a XP/VX archive...");
-                                encrypted.ExtractAllFiles(where, User.Default.OverwriteFiles);
+                                encrypted.ExtractAllFiles(where, Settings.Values.OverwriteFiles);
                             }
                             catch (IOException file)
                             {
@@ -489,7 +489,7 @@ namespace rpg_patcher
                             try
                             {
                                 Misc.UpdateStatus("Extracting all files for a VX Ace archive...");
-                                encrypted.ExtractAllFiles(where, User.Default.OverwriteFiles);
+                                encrypted.ExtractAllFiles(where, Settings.Values.OverwriteFiles);
                             }
                             catch (IOException file)
                             {
@@ -571,7 +571,7 @@ namespace rpg_patcher
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, User.Default.OverwriteFiles);
+                                    encrypted.ExtractFile(_result, where, Settings.Values.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
@@ -596,7 +596,7 @@ namespace rpg_patcher
 
                                 if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, User.Default.OverwriteFiles);
+                                    encrypted.ExtractFile(_result, where, Settings.Values.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
@@ -670,7 +670,7 @@ namespace rpg_patcher
         {
             public static string FileSize(int bytes)
             {
-                switch (User.Default.BytePref)
+                switch (Settings.Values.BytePref)
                 {
                     // kilobytes/megabytes
                     case 1:
