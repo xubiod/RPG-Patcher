@@ -11,6 +11,8 @@ namespace rpg_patcher
     {
         public static string ProjectPath = "";
 
+        public static MenuBar mainMenuBar;
+
         static void Main(string[] args)
         {
             Functions.Checks.CheckForRPGMaker();
@@ -23,7 +25,7 @@ namespace rpg_patcher
             Style.Theme(User.Default.Theme);
 
             // menubar
-            var menu = new MenuBar(new MenuBarItem[] {
+            mainMenuBar = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
                     new MenuItem ("_About", "", () => {
                         StaticWindows.About about = new StaticWindows.About();
@@ -133,7 +135,7 @@ namespace rpg_patcher
             });
 
             // add menu and main window
-            Application.Top.Add(menu, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Bottom(StaticWindows.Main._window) - 1 });
+            Application.Top.Add(mainMenuBar, StaticWindows.Main._window, new Label("Current operation status will be displayed here") { Id = "ProgressText", X = 1, Y = Pos.Bottom(StaticWindows.Main._window) - 1 });
 
             // initalize static windows
             //StaticWindows.Create();

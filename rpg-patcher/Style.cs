@@ -103,7 +103,7 @@ namespace rpg_patcher
 
                         Colors.Menu = new ColorScheme()
                         {
-                            Normal = TGAttribute.Make(Color.Black, Color.Gray),
+                            Normal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
                             HotNormal = TGAttribute.Make(Color.DarkGray, Color.Gray),
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
@@ -342,6 +342,7 @@ namespace rpg_patcher
 
             //StaticWindows.RefreshColors();
             StaticWindows.Main.RefreshColors();
+            if (Program.mainMenuBar != null) Program.mainMenuBar.ColorScheme = Colors.Menu;
             User.Default.Theme = mode;
 
             Task.Delay(50).ContinueWith(t => { Application.Refresh(); });
