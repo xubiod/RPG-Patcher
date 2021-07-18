@@ -166,6 +166,8 @@ namespace rpg_patcher
 
             public static string GetVersion(string input)
             {
+                if (input == "") return null;
+
                 RPGMakerVersion _version = RGSSAD.GetVersion(input);
 
                 switch (_version)
