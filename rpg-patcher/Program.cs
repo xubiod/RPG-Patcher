@@ -13,10 +13,17 @@ namespace rpg_patcher
 
         public static MenuBar mainMenuBar;
 
-        static void Main(string[] args)
+        private static void Preload()
         {
             User.Load("settings");
+            if (User.Default.PersistentProject) ProjectPath = File.ReadAllText("project");
+
             Functions.Checks.CheckForRPGMaker();
+        }
+
+        static void Main(string[] args)
+        {
+            Preload();
 
             // initalize terminal.gui
             Application.Init();
@@ -43,7 +50,7 @@ namespace rpg_patcher
 
                 new MenuBarItem ("_Project", new MenuItem [] {
                     new MenuItem ("_Load (DO FIRST)", "", () => {
-                        Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements);
+                        Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => UpdateElements());
                     }),
                     new MenuItem ("_Create project files with loaded version", "", () => {
                         Functions.Project.MakeProject();
@@ -61,7 +68,7 @@ namespace rpg_patcher
 
                 new MenuBarItem ("_Extracting", new MenuItem [] {
                     new MenuItem ("_Load (DO FIRST)", "", () => {
-                        Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, Program.UpdateElements);
+                        Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => UpdateElements());
                     }),
                     new MenuItem ("_Copy game files from project directory", "", () => {
                         Functions.Extract.CopyGameFiles();
@@ -141,15 +148,17 @@ namespace rpg_patcher
             // initalize static windows
             //StaticWindows.Create();
             StaticWindows.Main.Init();
+            UpdateElements(true);
 
             // run it
             Application.Run();
         }
 
-        public static void UpdateElements()
+        public static void UpdateElements(bool forceNoOpen = false)
         {
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
-            ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
+            if (!forceNoOpen) ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
+            if (User.Default.PersistentProject) File.WriteAllText("project", ProjectPath);
 
             (StaticWindows.Main._window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString") as Label).Text = $"Project: {ProjectPath}\nVersion: {Functions.Operation.GetVersion(ProjectPath)} {Functions.Operation.VersionInstalled(RGSSAD.GetVersion(ProjectPath))}";
 
