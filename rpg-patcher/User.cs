@@ -60,7 +60,7 @@ namespace rpg_patcher
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
                 Default.PersistentProject = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
             }
-            catch (IOException ioe)
+            catch
             {
                 Save(filename);
                 Load(filename);
