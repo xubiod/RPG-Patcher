@@ -45,7 +45,7 @@ namespace rpg_patcher
                     new MenuItem ("_Unload", "", () => {
                         ProjectPath = "";
                         File.Delete("project");
-                        UpdateElements(true);
+                        UpdateElements(true, true);
                     }),
                     new MenuItem ("_Settings", "", () => {
                         StaticWindows.Settings settings = new StaticWindows.Settings();
@@ -159,17 +159,17 @@ namespace rpg_patcher
             // initalize static windows
             //StaticWindows.Create();
             StaticWindows.Main.Init();
-            UpdateElements(true);
+            UpdateElements(true, true);
 
             // run it
             Application.Run();
         }
 
-        public static void UpdateElements(bool forceNoOpen = false)
+        public static void UpdateElements(bool forceNoOpen = false, bool forceNoProjectSave = false)
         {
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
             if (!forceNoOpen) ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
-            if (Settings.Values.PersistentProject && String.IsNullOrWhiteSpace(ProjectPath)) File.WriteAllText("project", ProjectPath);
+            if (Settings.Values.PersistentProject && !forceNoProjectSave && !String.IsNullOrWhiteSpace(ProjectPath)) File.WriteAllText("project", ProjectPath);
 
             string project = "No project loaded.";
 
