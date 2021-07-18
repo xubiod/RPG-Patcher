@@ -22,10 +22,10 @@ namespace rpg_patcher
         public static void Save(string filename)
         {
             int index = 0;
-            int size = sizeof(int) * Values.Count;
+            int size = sizeof(ushort) * Values.Count;
             byte[] data = new byte[size];
             byte[] bufferIn;
-            int[] allToBuffer = { Values.BytePref, Values.Theme, Convert.ToInt32(Values.OverwriteFiles), Convert.ToInt32(Values.PersistentProject) };
+            ushort[] allToBuffer = { Convert.ToUInt16(Values.BytePref), Convert.ToUInt16(Values.Theme), Convert.ToUInt16(Values.OverwriteFiles), Convert.ToUInt16(Values.PersistentProject) };
 
             for (int i = 0; i < allToBuffer.Length; i++)
             {
@@ -43,22 +43,22 @@ namespace rpg_patcher
             try
             {
                 byte[] data = File.ReadAllBytes(filename);
-                byte[] bufferOut = new byte[sizeof(int)];
+                byte[] bufferOut = new byte[sizeof(ushort)];
 
-                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Values.BytePref = BitConverter.ToInt32(bufferOut, 0);
-                index += sizeof(int);
+                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(ushort));
+                Values.BytePref = BitConverter.ToUInt16(bufferOut, 0);
+                index += sizeof(ushort);
 
-                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Values.Theme = BitConverter.ToInt32(bufferOut, 0);
-                index += sizeof(int);
+                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(ushort));
+                Values.Theme = BitConverter.ToUInt16(bufferOut, 0);
+                index += sizeof(ushort);
 
-                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Values.OverwriteFiles = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
-                index += sizeof(int);
+                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(ushort));
+                Values.OverwriteFiles = Convert.ToBoolean(BitConverter.ToUInt16(bufferOut, 0));
+                index += sizeof(ushort);
 
-                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
-                Values.PersistentProject = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
+                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(ushort));
+                Values.PersistentProject = Convert.ToBoolean(BitConverter.ToUInt16(bufferOut, 0));
             }
             catch
             {
