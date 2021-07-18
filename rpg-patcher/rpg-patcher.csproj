@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Reference Include="RM2k2XP.NETCore.Converters">
-      <HintPath>C:\Users\pitts\source\repos\xubiod\RM2k2XP.NETCore\RM2k2XP.NETCore.Converters\bin\Debug\netcoreapp3.1\RM2k2XP.NETCore.Converters.dll</HintPath>
+      <HintPath>..\..\xubiod\RM2k2XP.NETCore\RM2k2XP.NETCore.Converters\bin\Debug\netcoreapp3.1\RM2k2XP.NETCore.Converters.dll</HintPath>
     </Reference>
     <Reference Include="RPGMakerDecrypter.Decrypter.Core">
       <HintPath>..\..\RPGMakerDecrypter\RPGMakerDecrypter.Decrypter.Core\bin\Debug\netcoreapp2.1\RPGMakerDecrypter.Decrypter.Core.dll</HintPath>
