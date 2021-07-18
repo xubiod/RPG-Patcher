@@ -290,6 +290,23 @@ namespace rpg_patcher
                     Application.RequestStop(); Operation.ShowError(ex.Message);
                 }
             }
+
+            public static void MakeMVProject(bool ignoreComplete = false)
+            {
+                try
+                {
+                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { "Game.rpgproject" }, () => {
+                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
+                        File.WriteAllText(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\Game.rpgproject", "RPGMV 1.6.2");
+
+                        if (!ignoreComplete) Operation.OperationCompleted();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Application.RequestStop(); Operation.ShowError(ex.Message);
+                }
+            }
         }
 
         public class Extract
