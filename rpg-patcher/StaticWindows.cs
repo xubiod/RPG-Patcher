@@ -119,7 +119,7 @@ namespace rpg_patcher
                     Y = Pos.At(4),
                     Id = "ProjectString",
                     ColorScheme = Style.HighlighedLabel,
-                    Width = 64
+                    Width = Dim.Fill()
                 },
                 new Label("Here's some of the more common actions you can do:")
                 {
