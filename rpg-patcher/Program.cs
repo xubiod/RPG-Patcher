@@ -13,21 +13,6 @@ namespace rpg_patcher
 
         static void Main(string[] args)
         {
-            // update detector
-            if (false)//!Functions.Checks.IsUpToDate())
-            {
-                var defaultFore = Console.ForegroundColor;
-                Console.Write("This version of RPG Patcher is out of date\nPlease update it manually with .NET Core 3 from:\n");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("https://github.com/xubiod/RPG-Patcher");
-
-                Console.ForegroundColor = defaultFore;
-                Console.Write("\nPress any key to continue...");
-
-                Console.ReadKey();
-                Console.Clear();
-            }
-
             Functions.Checks.CheckForRPGMaker();
 
             // initalize terminal.gui

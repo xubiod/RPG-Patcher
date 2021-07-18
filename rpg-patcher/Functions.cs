@@ -22,19 +22,6 @@ namespace rpg_patcher
 
         public static class Checks
         {
-            public static bool IsUpToDate()
-            {
-                using var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("User-Agent", "RPG Patcher-" + ThisAssembly.Git.Tag);
-                using var response = client.GetAsync("https://api.github.com/repos/xubiod/RPG-Patcher/commits").Result;
-                var json = response.Content.ReadAsStringAsync().Result;
-
-                dynamic commits = JArray.Parse(json);
-                string lastCommit = commits[0].sha;
-
-                return lastCommit == ThisAssembly.Git.Sha;
-            }
-
             // https://stackoverflow.com/questions/16379143/check-if-application-is-installed-in-registry
             static bool CheckInstalled(string c_name)
             {
