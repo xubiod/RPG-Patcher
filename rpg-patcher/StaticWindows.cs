@@ -190,7 +190,7 @@ namespace rpg_patcher
 
                 SetupElements();
 
-                _window.Add(content);
+                _window.Add(scrollBarView);
                 _window.Add(quit);
 
                 return _window;
@@ -200,11 +200,13 @@ namespace rpg_patcher
             {
                 (content[1] as RadioGroup).SelectedItem = User.Default.BytePref;
                 (content[3] as RadioGroup).SelectedItem = User.Default.OverwriteFiles ? 0 : 1;
-                (content[5] as RadioGroup).SelectedItem = User.Default.Theme;
+                (content[5] as RadioGroup).SelectedItem = User.Default.PersistentProject ? 1 : 0;
+                (content[7] as RadioGroup).SelectedItem = User.Default.Theme;
 
                 (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.BytePref = x.SelectedItem; };
                 (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.OverwriteFiles = x.SelectedItem == 0; };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
+                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { User.Default.PersistentProject = x.SelectedItem == 1; };
+                (content[7] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
 
                 quit = new Button("Close", true)
                 {
@@ -213,6 +215,16 @@ namespace rpg_patcher
                 };
 
                 quit.Clicked += () => { User.Save("settings"); Main._window.SetFocus(); Application.RequestStop(); };
+
+                scrollBarView.X = 0;
+                scrollBarView.Y = 0;
+
+                scrollBarView.ContentSize = new Size(40, 30);
+
+                scrollBarView.Width = Dim.Fill();
+                scrollBarView.Height = Dim.Fill(3);
+
+                scrollBarView.Add(content);
             }
 
             public void RefreshColors()
@@ -224,20 +236,25 @@ namespace rpg_patcher
             public bool OverwriteFiles = true;
 
             static View[] content = {
-                new Label(1, 1, "Byte Representation"),
+                new Label(1, 0, "Byte Representation"),
 
-                new RadioGroup(2, 2, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
+                new RadioGroup(2, 1, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
 
-                new Label(1, 6, "File Behaviour"),
+                new Label(1, 5, "File Behaviour"),
 
-                new RadioGroup(2, 7, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0),
+                new RadioGroup(2, 6, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0),
 
-                new Label(1, 10, "Theme"),
+                new Label(1, 9, "Store last used project"),
 
-                new RadioGroup(2, 11, Style.ThemeNamesAsUstringArray(), 0)
+                new RadioGroup(2, 10, new NStack.ustring[] {"No (Default)", "Yes"}, 0),
+
+                new Label(1, 13, "Theme"),
+
+                new RadioGroup(2, 14, Style.ThemeNamesAsUstringArray(), 0)
             };
 
             static Button quit;
+            static ScrollView scrollBarView = new ScrollView();
         }
 
         public class ExportOneFile

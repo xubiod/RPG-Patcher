@@ -14,15 +14,18 @@ namespace rpg_patcher
             public static int BytePref;
             public static int Theme;
             public static bool OverwriteFiles = true;
+            public static bool PersistentProject = false;
+
+            public static int Count = 4;
         }
 
         public static void Save(string filename)
         {
             int index = 0;
-            int size = sizeof(int) * 3;
+            int size = sizeof(int) * Default.Count;
             byte[] data = new byte[size];
             byte[] bufferIn;
-            int[] allToBuffer = { Default.BytePref, Default.Theme, Convert.ToInt32(Default.OverwriteFiles) };
+            int[] allToBuffer = { Default.BytePref, Default.Theme, Convert.ToInt32(Default.OverwriteFiles), Convert.ToInt32(Default.PersistentProject) };
 
             for (int i = 0; i < allToBuffer.Length; i++)
             {
@@ -52,6 +55,10 @@ namespace rpg_patcher
 
                 Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
                 Default.OverwriteFiles = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
+                index += sizeof(int);
+
+                Buffer.BlockCopy(data, index, bufferOut, 0, sizeof(int));
+                Default.PersistentProject = Convert.ToBoolean(BitConverter.ToInt32(bufferOut, 0));
             }
             catch (IOException ioe)
             {
