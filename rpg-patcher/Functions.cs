@@ -24,13 +24,16 @@ namespace rpg_patcher
         {
             public class Installed
             {
-                public static bool XP { get; protected set; }
-                public static bool VX { get; protected set; }
-                public static bool VXAce { get; protected set; }
+                public static bool RM2k_2003 { get; protected set; }
+                public static bool RMXP { get; protected set; }
+                public static bool RMVX { get; protected set; }
+                public static bool RMVXAce { get; protected set; }
+                public static bool RMMV { get; protected set; }
+                public static bool RMMZ { get; protected set; }
 
-                public static void Set(bool xp, bool vx, bool vxace)
+                public static void Set(bool xp = false, bool vx = false, bool vxace = false, bool mv = false, bool mz = false, bool rm2k_2003 = false)
                 {
-                    XP = xp; VX = vx; VXAce = vxace;
+                    RMXP = xp; RMVX = vx; RMVXAce = vxace; RMMV = mv; RMMZ = mz; RM2k_2003 = rm2k_2003;
                 }
             }
 
@@ -73,7 +76,7 @@ namespace rpg_patcher
 
             public static void CheckForRPGMaker()
             {
-                Installed.Set(CheckInstalled("RPG Maker XP"), CheckInstalled("RPG Maker VX"), CheckInstalled("RPG Maker VX Ace"));
+                Installed.Set(CheckInstalled("RPG Maker XP"), CheckInstalled("RPG Maker VX"), CheckInstalled("RPG Maker VX Ace"), CheckInstalled("RPG Maker MV"), CheckInstalled("RPG Maker MZ"), CheckInstalled("RPG Maker 2000") || CheckInstalled("RPG Maker 2003"));
             }
         }
 
@@ -155,9 +158,9 @@ namespace rpg_patcher
 
                 switch (version)
                 {
-                    case RPGMakerVersion.Xp: { result = Checks.Installed.XP; break; }
-                    case RPGMakerVersion.Vx: { result = Checks.Installed.VX; break; }
-                    case RPGMakerVersion.VxAce: { result = Checks.Installed.VXAce; break; }
+                    case RPGMakerVersion.Xp: { result = Checks.Installed.RMXP; break; }
+                    case RPGMakerVersion.Vx: { result = Checks.Installed.RMVX; break; }
+                    case RPGMakerVersion.VxAce: { result = Checks.Installed.RMVXAce; break; }
                     default: { result = false; break; }
                 }
 

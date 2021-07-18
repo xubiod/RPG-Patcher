@@ -16,7 +16,7 @@ namespace rpg_patcher
         private static void Preload()
         {
             Settings.Load("settings");
-            if (Settings.Values.PersistentProject) ProjectPath = File.ReadAllText("project");
+            if (Settings.Values.PersistentProject && File.Exists("project")) ProjectPath = File.ReadAllText("project");
 
             Functions.Checks.CheckForRPGMaker();
         }
@@ -41,6 +41,11 @@ namespace rpg_patcher
                     }),
                     new MenuItem ("_Load", "", () => {
                         Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => UpdateElements());
+                    }),
+                    new MenuItem ("_Unload", "", () => {
+                        ProjectPath = "";
+                        File.Delete("project");
+                        UpdateElements(true);
                     }),
                     new MenuItem ("_Settings", "", () => {
                         StaticWindows.Settings settings = new StaticWindows.Settings();
@@ -115,10 +120,16 @@ namespace rpg_patcher
                         closeDialog.Clicked += () => { StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
 
                         Dialog installed = new Dialog("RPG Maker installs");
-                        installed.AddButton(closeDialog);
-                        installed.Add(new Label($"RPG Maker XP installed: {(Functions.Checks.Installed.XP ? "Yes" : "No")}\nRPG Maker VX installed: {(Functions.Checks.Installed.VX ? "Yes" : "No")}\nRPG Maker VX Ace installed: {(Functions.Checks.Installed.VXAce ? "Yes" : "No")}\n\nInstalled or not, this program\nwill not restrict use."));
-                        installed.Width = Dim.Percent(30);
-                        installed.Height = Dim.Percent(30);
+                        installed.AddButton(closeDialog); // \n\n
+
+                        installed.Add(new Label($"RPG Maker 2000/2003 installed*:\nRPG Maker XP installed:\nRPG Maker VX installed:\nRPG Maker VX Ace installed:\nRPG Maker MV installed*:\nRPG Maker MZ installed**:"));
+
+                        Label installed_versions = new Label($"{(Functions.Checks.Installed.RM2k_2003 ? "Yes" : "No")}\n{(Functions.Checks.Installed.RMXP ? "Yes" : "No")}\n{(Functions.Checks.Installed.RMVX ? "Yes" : "No")}\n{(Functions.Checks.Installed.RMVXAce ? "Yes" : "No")}\n{(Functions.Checks.Installed.RMMV ? "Yes" : "No")}\n{(Functions.Checks.Installed.RMMZ ? "Yes" : "No")}") { TextAlignment = TextAlignment.Right, X = Pos.Right(installed) - Pos.X(installed) - 6 };
+                        installed.Add(installed_versions);
+                        installed.Add(new Label($"Installed or not, this program will not restrict use.\n\n*Functionality currently limited.\n**No RMMZ functionality available, as I don't own it.") { Y = Pos.Bottom(installed_versions) + 1 });
+
+                        installed.Width = Dim.Percent(50);
+                        installed.Height = Dim.Percent(47);
 
                         Application.Run(installed);
                     }),
@@ -158,7 +169,7 @@ namespace rpg_patcher
         {
             //( as Label).Text = "Project: " + StaticWindows.Open._window.FilePath;
             if (!forceNoOpen) ProjectPath = (Functions.FileDialog._OpenDialog.FilePath).ToString();
-            if (Settings.Values.PersistentProject) File.WriteAllText("project", ProjectPath);
+            if (Settings.Values.PersistentProject && String.IsNullOrWhiteSpace(ProjectPath)) File.WriteAllText("project", ProjectPath);
 
             string project = "No project loaded.";
 
