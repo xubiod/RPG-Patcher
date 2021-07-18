@@ -22,6 +22,18 @@ namespace rpg_patcher
 
         public static class Checks
         {
+            public class Installed
+            {
+                public static bool XP { get; protected set; }
+                public static bool VX { get; protected set; }
+                public static bool VXAce { get; protected set; }
+
+                public static void Set(bool xp, bool vx, bool vxace)
+                {
+                    XP = xp; VX = vx; VXAce = vxace;
+                }
+            }
+
             // https://stackoverflow.com/questions/16379143/check-if-application-is-installed-in-registry
             static bool CheckInstalled(string c_name)
             {
@@ -61,30 +73,7 @@ namespace rpg_patcher
 
             public static void CheckForRPGMaker()
             {
-                var xp =    CheckInstalled("RPG Maker XP");
-                var vx =    CheckInstalled("RPG Maker VX");
-                var vxace = CheckInstalled("RPG Maker VX Ace");
-
-                var fore = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-
-                if (!xp)    Console.WriteLine("RPG Maker XP has not been detected in the registry");
-                if (!vx)    Console.WriteLine("RPG Maker VX has not been detected in the registry");
-                if (!vxace) Console.WriteLine("RPG Maker VX Ace has not been detected in the registry");
-
-                Console.ForegroundColor = fore;
-                if (!(xp && vx && vxace))
-                {
-                    Console.Write(
-@"
-This doesn't mean that you can't run or use RPG Patcher, but you won't be able to edit maps and scripts without
-some external tools or the appropriate RPG Maker version.
-
-Please do not pirate RPG Maker just for modding, fan-made patches, etc.
-
-Press any key to continue...");
-                    Console.ReadKey();
-                }
+                Installed.Set(CheckInstalled("RPG Maker XP"), CheckInstalled("RPG Maker VX"), CheckInstalled("RPG Maker VX Ace"));
             }
         }
 

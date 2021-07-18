@@ -93,6 +93,19 @@ namespace rpg_patcher
                 }),
 
                 new MenuBarItem ("_Special", new MenuItem [] {
+                    new MenuItem ("_Check for RPG Maker installs in the registry", "", () => {
+                        // $"RPG Maker XP installed: {(Functions.Checks.Installed.XP ? "Yes" : "No")}\nRPG Maker VX installed: {(Functions.Checks.Installed.VX ? "Yes" : "No")}\nRPG Maker VX Ace installed: {(Functions.Checks.Installed.VXAce ? "Yes" : "No")}"
+                        Button closeDialog = new Button("Close", true);
+                        closeDialog.Clicked += () => { StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
+
+                        Dialog installed = new Dialog("RPG Maker installs");
+                        installed.AddButton(closeDialog);
+                        installed.Add(new Label($"RPG Maker XP installed: {(Functions.Checks.Installed.XP ? "Yes" : "No")}\nRPG Maker VX installed: {(Functions.Checks.Installed.VX ? "Yes" : "No")}\nRPG Maker VX Ace installed: {(Functions.Checks.Installed.VXAce ? "Yes" : "No")}"));
+                        installed.Width = Dim.Percent(30);
+                        installed.Height = Dim.Percent(30);
+
+                        Application.Run(installed);
+                    }),
                     new MenuItem ("_RPG Maker 2000/03 Charset -> XP format (entire folder)", "", () => {
                         string infile = "", outfile = "";
 
