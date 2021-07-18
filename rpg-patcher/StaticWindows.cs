@@ -212,7 +212,7 @@ namespace rpg_patcher
                     Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
                 };
 
-                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+                quit.Clicked += () => { User.Save("settings"); Main._window.SetFocus(); Application.RequestStop(); };
             }
 
             public void RefreshColors()

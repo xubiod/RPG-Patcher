@@ -15,6 +15,7 @@ namespace rpg_patcher
 
         static void Main(string[] args)
         {
+            User.Load("settings");
             Functions.Checks.CheckForRPGMaker();
 
             // initalize terminal.gui
