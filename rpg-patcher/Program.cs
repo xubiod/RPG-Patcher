@@ -66,7 +66,7 @@ namespace rpg_patcher
                     new MenuItem ("Create _VX project files", "", () => {
                         Functions.Project.MakeProjectIndeterministic(RPGMakerVersion.Vx);
                     }),
-                    new MenuItem ("_Create VX _Ace project files", "", () => {
+                    new MenuItem ("Create VX _Ace project files", "", () => {
                         Functions.Project.MakeProjectIndeterministic(RPGMakerVersion.VxAce);
                     }),
                     new MenuItem ("Create _MV project files", "", () => {
