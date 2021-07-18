@@ -52,9 +52,11 @@ namespace rpg_patcher
                     new MenuItem ("_Load (DO FIRST)", "", () => {
                         Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => UpdateElements());
                     }),
+                    null,
                     new MenuItem ("_Create project files with loaded version", "", () => {
                         Functions.Project.MakeProject();
                     }),
+                    null,
                     new MenuItem ("_Create XP project files", "", () => {
                         Functions.Project.MakeProjectIndeterministic(RPGMakerVersion.Xp);
                     }),
@@ -63,6 +65,9 @@ namespace rpg_patcher
                     }),
                     new MenuItem ("_Create VX Ace project files", "", () => {
                         Functions.Project.MakeProjectIndeterministic(RPGMakerVersion.VxAce);
+                    }),
+                    new MenuItem ("_Create MV project files", "", () => {
+                        Functions.Project.MakeMVProject();
                     })
                 }),
 
@@ -70,12 +75,14 @@ namespace rpg_patcher
                     new MenuItem ("_Load (DO FIRST)", "", () => {
                         Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => UpdateElements());
                     }),
+                    null,
                     new MenuItem ("_Copy game files from project directory", "", () => {
                         Functions.Extract.CopyGameFiles();
                     }),
                     new MenuItem ("_List files in the archive", "", () => {
                         Functions.Extract.GetAllFiles();
                     }),
+                    null,
                     new MenuItem ("_Extract single file", "", () => {
                         Functions.Operation.ExecuteIfProjectSelected(() => {
                             StaticWindows.ExportOneFile oneFile = new StaticWindows.ExportOneFile();
@@ -116,6 +123,7 @@ namespace rpg_patcher
 
                         Application.Run(installed);
                     }),
+                    null,
                     new MenuItem ("_RPG Maker 2000/03 Charset -> XP format (entire folder)", "", () => {
                         string infile = "", outfile = "";
 
