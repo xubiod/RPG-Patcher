@@ -15,13 +15,16 @@ namespace rpg_patcher
         public static ColorScheme HighlighedLabel;
 
         public const int Theme_Dark = 0;
-        public const int Theme_Light = 1;
-        public const int Theme_OldBSOD = 2;
-        public const int Theme_Terminal = 3;
+        public const int Theme_Darker = 1;
+        public const int Theme_Darkerer = 2;
+        public const int Theme_Light = 3;
+        public const int Theme_Lighter = 4;
+        public const int Theme_OldBSOD = 5;
+        public const int Theme_Terminal = 6;
 
         public static readonly Dictionary<string, int> Themes = new Dictionary<string, int>()
         {
-            { "Dark", Theme_Dark }, { "Light", Theme_Light }, { "Old BSOD", Theme_OldBSOD }, { "Terminal", Theme_Terminal }
+            { "Dark", Theme_Dark }, { "Dark+", Theme_Darker }, { "Darker", Theme_Darkerer }, { "Light", Theme_Light }, { "Lighter", Theme_Lighter }, { "Old BSOD", Theme_OldBSOD }, { "Terminal", Theme_Terminal }
         };
 
         public static ustring[] ThemeNamesAsUstringArray()
@@ -52,8 +55,8 @@ namespace rpg_patcher
                         Colors.Base = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
-                            HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
@@ -88,14 +91,95 @@ namespace rpg_patcher
                         break;
                     }
 
+                case Theme_Darker:
+                    {
+                        Colors.Base = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Black),
+                            Focus = TGAttribute.Make(Color.White, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
+                        };
+
+                        Colors.Menu = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Black, Color.Gray),
+                            Focus = TGAttribute.Make(Color.White, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.DarkGray, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
+                        };
+
+                        Colors.Dialog = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Black),
+                            Focus = TGAttribute.Make(Color.White, Color.Blue),
+                            HotNormal = TGAttribute.Make(Color.Blue, Color.White),
+                            HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.White, Color.Blue),
+                            Focus = TGAttribute.Make(Color.White, Color.BrightBlue),
+                            HotNormal = TGAttribute.Make(Color.White, Color.Blue),
+                            HotFocus = TGAttribute.Make(Color.White, Color.BrightBlue)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+                        break;
+                    }
+
+                case Theme_Darkerer:
+                    {
+                        Colors.Base = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Black),
+                            Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
+                        };
+
+                        Colors.Menu = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Black),
+                            Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
+                        };
+
+                        Colors.Dialog = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Black),
+                            Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Gray, Color.Black),
+                            Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotNormal = TGAttribute.Make(Color.Gray, Color.DarkGray),
+                            HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Blue, Color.Black)
+                        };
+                        break;
+                    }
+
                 case Theme_Light:
                     {
                         Colors.Base = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
-                            HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
-
                             Focus = TGAttribute.Make(Color.White, Color.Brown),
+                            HotNormal = TGAttribute.Make(Color.White, Color.DarkGray),
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Brown)
                         };
 
@@ -208,6 +292,47 @@ namespace rpg_patcher
                         HighlighedLabel = new ColorScheme()
                         {
                             Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+                        break;
+                    }
+
+                case Theme_Lighter:
+                    {
+                        Colors.Base = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Black, Color.White),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
+                            HotNormal = TGAttribute.Make(Color.Black, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+
+                        Colors.Menu = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Black, Color.White),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
+                            HotNormal = TGAttribute.Make(Color.Black, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+
+                        Colors.Dialog = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Black, Color.White),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
+                            HotNormal = TGAttribute.Make(Color.Black, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+
+                        ArchivedList = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.Black, Color.White),
+                            Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
+                            HotNormal = TGAttribute.Make(Color.Black, Color.Gray),
+                            HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
+                        };
+
+                        HighlighedLabel = new ColorScheme()
+                        {
+                            Normal = TGAttribute.Make(Color.BrightRed, Color.White)
                         };
                         break;
                     }
