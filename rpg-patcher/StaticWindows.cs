@@ -230,6 +230,7 @@ namespace rpg_patcher
             public void RefreshColors()
             {
                 _window.ColorScheme = Colors.Base;
+                Application.Refresh();
             }
 
             public int BytePref = 0;
@@ -253,8 +254,8 @@ namespace rpg_patcher
                 new RadioGroup(2, 14, Style.ThemeNamesAsUstringArray(), 0)
             };
 
-            static Button quit;
-            static ScrollView scrollBarView = new ScrollView();
+            Button quit;
+            ScrollView scrollBarView = new ScrollView();
         }
 
         public class ExportOneFile
