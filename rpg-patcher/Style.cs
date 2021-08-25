@@ -1,33 +1,30 @@
-﻿using NStack;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NStack;
 using Terminal.Gui;
 using TGAttribute = Terminal.Gui.Attribute;
 
 namespace rpg_patcher
 {
-    class Style
+    internal class Style
     {
         public static ColorScheme ArchivedList;
         public static ColorScheme HighlighedLabel;
 
-        public const int Theme_Dark = 0;
-        public const int Theme_Darker = 1;
-        public const int Theme_Darkerer = 2;
-        public const int Theme_Light = 3;
-        public const int Theme_Lighter = 4;
-        public const int Theme_OldBSOD = 5;
-        public const int Theme_Terminal = 6;
-        public const int Theme_Monochrome = 7;
-        public const int Theme_MonochromeDark = 8;
+        public const int ThemeDark = 0;
+        public const int ThemeDarker = 1;
+        public const int ThemeDarkerer = 2;
+        public const int ThemeLight = 3;
+        public const int ThemeLighter = 4;
+        public const int ThemeOldBsod = 5;
+        public const int ThemeTerminal = 6;
+        public const int ThemeMonochrome = 7;
+        public const int ThemeMonochromeDark = 8;
 
-        public static readonly Dictionary<string, int> Themes = new Dictionary<string, int>()
+        public static readonly Dictionary<string, int> Themes = new Dictionary<string, int>
         {
-            { "Dark", Theme_Dark }, { "Dark+", Theme_Darker }, { "Darker", Theme_Darkerer }, { "Light", Theme_Light }, { "Lighter", Theme_Lighter }, { "Old BSOD", Theme_OldBSOD }, { "Terminal", Theme_Terminal },
-            { "Monochrome Bright", Theme_Monochrome }, { "Monochrome Dark", Theme_MonochromeDark }
+            { "Dark", ThemeDark }, { "Dark+", ThemeDarker }, { "Darker", ThemeDarkerer }, { "Light", ThemeLight }, { "Lighter", ThemeLighter }, { "Old BSOD", ThemeOldBsod }, { "Terminal", ThemeTerminal },
+            { "Monochrome Bright", ThemeMonochrome }, { "Monochrome Dark", ThemeMonochromeDark }
         };
 
         public static ustring[] ThemeNamesAsUstringArray()
@@ -53,9 +50,9 @@ namespace rpg_patcher
         {
             switch (mode)
             {
-                case Theme_Dark:
+                case ThemeDark:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -63,7 +60,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -71,7 +68,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -79,7 +76,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Blue),
                             Focus = TGAttribute.Make(Color.White, Color.BrightBlue),
@@ -87,16 +84,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.BrightBlue)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
                         break;
                     }
 
-                case Theme_Darker:
+                case ThemeDarker:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -104,7 +101,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.DarkGray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -112,7 +109,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -120,7 +117,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Blue),
                             Focus = TGAttribute.Make(Color.White, Color.BrightBlue),
@@ -128,16 +125,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.BrightBlue)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
                         break;
                     }
 
-                case Theme_Darkerer:
+                case ThemeDarkerer:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Black),
                             Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
@@ -145,7 +142,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Black),
                             Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
@@ -153,7 +150,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Black),
                             Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
@@ -161,7 +158,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Black),
                             Focus = TGAttribute.Make(Color.Gray, Color.DarkGray),
@@ -169,16 +166,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.DarkGray, Color.Black)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Blue, Color.Black)
                         };
                         break;
                     }
 
-                case Theme_Light:
+                case ThemeLight:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
                             Focus = TGAttribute.Make(Color.White, Color.Brown),
@@ -186,7 +183,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Brown)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.Gray),
                             Focus = TGAttribute.Make(Color.White, Color.Blue),
@@ -194,7 +191,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightCyan, Color.Blue)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.White, Color.Brown),
@@ -202,7 +199,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Brown)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Brown),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
@@ -210,16 +207,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.BrightYellow)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightBlue, Color.Gray)
                         };
                         break;
                     }
 
-                case Theme_OldBSOD:
+                case ThemeOldBsod:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
                             Focus = TGAttribute.Make(Color.Blue, Color.Gray),
@@ -227,7 +224,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Gray, Color.Blue)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
                             Focus = TGAttribute.Make(Color.Blue, Color.Gray),
@@ -235,7 +232,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Gray, Color.Blue),
                             Focus = TGAttribute.Make(Color.Blue, Color.Gray),
@@ -243,7 +240,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Blue, Color.Gray)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Blue, Color.Gray),
                             Focus = TGAttribute.Make(Color.Gray, Color.Blue),
@@ -251,16 +248,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Gray, Color.Blue)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Blue)
                         };
                         break;
                     }
 
-                case Theme_Terminal:
+                case ThemeTerminal:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -268,7 +265,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -276,7 +273,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -284,7 +281,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightGreen, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -292,16 +289,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.BrightGreen)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
                         break;
                     }
 
-                case Theme_Lighter:
+                case ThemeLighter:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
@@ -309,7 +306,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
@@ -317,7 +314,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
@@ -325,7 +322,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.Black, Color.BrightYellow),
@@ -333,16 +330,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.BrightYellow, Color.Black)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.BrightRed, Color.White)
                         };
                         break;
                     }
 
-                case Theme_Monochrome:
+                case ThemeMonochrome:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.White, Color.Black),
@@ -350,7 +347,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.Black)
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.White, Color.Black),
@@ -358,7 +355,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.Black)
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.White, Color.Black),
@@ -366,7 +363,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.Black)
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White),
                             Focus = TGAttribute.Make(Color.White, Color.Black),
@@ -374,16 +371,16 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.White, Color.Black)
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.Black, Color.White)
                         };
                         break;
                     }
 
-                case Theme_MonochromeDark:
+                case ThemeMonochromeDark:
                     {
-                        Colors.Base = new ColorScheme()
+                        Colors.Base = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.White),
@@ -391,7 +388,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.White),
                         };
 
-                        Colors.Menu = new ColorScheme()
+                        Colors.Menu = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.White),
@@ -399,7 +396,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.White),
                         };
 
-                        Colors.Dialog = new ColorScheme()
+                        Colors.Dialog = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.White),
@@ -407,7 +404,7 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.White),
                         };
 
-                        ArchivedList = new ColorScheme()
+                        ArchivedList = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black),
                             Focus = TGAttribute.Make(Color.Black, Color.White),
@@ -415,19 +412,17 @@ namespace rpg_patcher
                             HotFocus = TGAttribute.Make(Color.Black, Color.White),
                         };
 
-                        HighlighedLabel = new ColorScheme()
+                        HighlighedLabel = new ColorScheme
                         {
                             Normal = TGAttribute.Make(Color.White, Color.Black)
                         };
                         break;
                     }
-
-                default: { break; }
             }
 
             //StaticWindows.RefreshColors();
             StaticWindows.Main.RefreshColors();
-            if (Program.mainMenuBar != null) Program.mainMenuBar.ColorScheme = Colors.Menu;
+            if (Program.MainMenuBar != null) Program.MainMenuBar.ColorScheme = Colors.Menu;
             Settings.Values.Theme = mode;
 
             Application.Refresh();

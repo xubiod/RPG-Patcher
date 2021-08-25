@@ -1,44 +1,40 @@
-﻿using RPGMakerDecrypter.Decrypter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
+using RM2k2XP.Converters;
+using RM2k2XP.Converters.Formats;
+using RPGMakerDecrypter.Decrypter;
 using Terminal.Gui;
 using TGAttribute = Terminal.Gui.Attribute;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.Win32;
-using System.Runtime.InteropServices;
-using System.Net.Http;
-using RM2k2XP.Converters;
 
 namespace rpg_patcher
 {
-    static class Functions
+    internal static class Functions
     {
-        public const string RNDString = "01990849ca73d97c358aa63409043a93";
+        public const string RndString = "01990849ca73d97c358aa63409043a93";
 
         public static class Checks
         {
             public class Installed
             {
-                public static bool RM2k_2003 { get; protected set; }
-                public static bool RMXP { get; protected set; }
-                public static bool RMVX { get; protected set; }
-                public static bool RMVXAce { get; protected set; }
-                public static bool RMMV { get; protected set; }
-                public static bool RMMZ { get; protected set; }
+                public static bool Rm2K2003 { get; protected set; }
+                public static bool Rmxp { get; protected set; }
+                public static bool Rmvx { get; protected set; }
+                public static bool RmvxAce { get; protected set; }
+                public static bool Rmmv { get; protected set; }
+                public static bool Rmmz { get; protected set; }
 
-                public static void Set(bool xp = false, bool vx = false, bool vxace = false, bool mv = false, bool mz = false, bool rm2k_2003 = false)
+                public static void Set(bool xp = false, bool vx = false, bool vxace = false, bool mv = false, bool mz = false, bool rm2K2003 = false)
                 {
-                    RMXP = xp; RMVX = vx; RMVXAce = vxace; RMMV = mv; RMMZ = mz; RM2k_2003 = rm2k_2003;
+                    Rmxp = xp; Rmvx = vx; RmvxAce = vxace; Rmmv = mv; Rmmz = mz; Rm2K2003 = rm2K2003;
                 }
             }
 
             // https://stackoverflow.com/questions/16379143/check-if-application-is-installed-in-registry
-            static bool CheckInstalled(string c_name)
+            private static bool CheckInstalled(string cName)
             {
                 string displayName;
 
@@ -49,7 +45,7 @@ namespace rpg_patcher
                     foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
                     {
                         displayName = subkey.GetValue("DisplayName") as string;
-                        if (displayName != null && displayName.Contains(c_name))
+                        if (displayName != null && displayName.Contains(cName))
                         {
                             return true;
                         }
@@ -59,22 +55,20 @@ namespace rpg_patcher
 
                 registryKey = @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
                 key = Registry.LocalMachine.OpenSubKey(registryKey);
-                if (key != null)
+                if (key == null) return false;
+                foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
                 {
-                    foreach (RegistryKey subkey in key.GetSubKeyNames().Select(keyName => key.OpenSubKey(keyName)))
+                    displayName = subkey.GetValue("DisplayName") as string;
+                    if (displayName != null && displayName.Contains(cName))
                     {
-                        displayName = subkey.GetValue("DisplayName") as string;
-                        if (displayName != null && displayName.Contains(c_name))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
-                    key.Close();
                 }
+                key.Close();
                 return false;
             }
 
-            public static void CheckForRPGMaker()
+            public static void CheckForRpgMaker()
             {
                 Installed.Set(CheckInstalled("RPG Maker XP"), CheckInstalled("RPG Maker VX"), CheckInstalled("RPG Maker VX Ace"), CheckInstalled("RPG Maker MV"), CheckInstalled("RPG Maker MZ"), CheckInstalled("RPG Maker 2000") || CheckInstalled("RPG Maker 2003"));
             }
@@ -82,8 +76,8 @@ namespace rpg_patcher
 
         public static class Operation
         {
-            static Label errorLabel = new Label("") { Height = Dim.Fill(1), Width = Dim.Fill(1) };
-            static Button quitError;
+            private static readonly Label ErrorLabel = new Label("") { Height = Dim.Fill(1), Width = Dim.Fill(1) };
+            private static Button _quitError;
 
             public static void OperationCompleted()
             {
@@ -94,7 +88,7 @@ namespace rpg_patcher
                     Y = Pos.Bottom(completed) - Pos.Y(completed) - 3
                 };
 
-                completed.ColorScheme = new ColorScheme()
+                completed.ColorScheme = new ColorScheme
                 {
                     Normal = TGAttribute.Make(Color.Black, Color.BrightGreen),
                     Focus = TGAttribute.Make(Color.Black, Color.BrightGreen),
@@ -108,7 +102,7 @@ namespace rpg_patcher
                 completed.X = Pos.Center();
                 completed.Y = Pos.Center();
 
-                quitComplete.Clicked += () => { StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
+                quitComplete.Clicked += () => { StaticWindows.Main.Window.SetFocus(); Application.RequestStop(); };
 
                 completed.Add(quitComplete);
                 Application.Run(completed);
@@ -116,9 +110,9 @@ namespace rpg_patcher
 
             public static void ShowError(string issue)
             {
-                Window Error = new Window("Error!")
+                Window error = new Window("Error!")
                 {
-                    ColorScheme = new ColorScheme()
+                    ColorScheme = new ColorScheme
                     {
                         Normal = TGAttribute.Make(Color.White, Color.BrightRed),
                         Focus = TGAttribute.Make(Color.White, Color.BrightRed),
@@ -133,52 +127,51 @@ namespace rpg_patcher
                     Y = Pos.Center()
                 };
 
-                quitError = new Button("Close", true)
+                _quitError = new Button("Close", true)
                 {
                     X = Pos.Center(),
-                    Y = Pos.Bottom(Error) - Pos.Y(Error) - 3
+                    Y = Pos.Bottom(error) - Pos.Y(error) - 3
                 };
-                quitError.Clicked += () => { Error.Remove(errorLabel); Application.RequestStop(); };
+                _quitError.Clicked += () => { error.Remove(ErrorLabel); Application.RequestStop(); };
 
-                errorLabel.Text = Regex.Replace(issue, "(.{46})", "$1\n");
-                errorLabel.X = 1;
-                errorLabel.Y = 1;
+                ErrorLabel.Text = Regex.Replace(issue, "(.{46})", "$1\n");
+                ErrorLabel.X = 1;
+                ErrorLabel.Y = 1;
 
-                Error.Add(errorLabel);
-                Error.Add(quitError);
+                error.Add(ErrorLabel);
+                error.Add(_quitError);
 
-                Application.Run(Error);
+                Application.Run(error);
             }
 
             public static string VersionInstalled(RPGMakerVersion version)
             {
                 const string installed = "(installed on system)";
-                const string not_installed = "(not installed on system)";
+                const string notInstalled = "(not installed on system)";
                 bool result;
 
                 switch (version)
                 {
-                    case RPGMakerVersion.Xp: { result = Checks.Installed.RMXP; break; }
-                    case RPGMakerVersion.Vx: { result = Checks.Installed.RMVX; break; }
-                    case RPGMakerVersion.VxAce: { result = Checks.Installed.RMVXAce; break; }
+                    case RPGMakerVersion.Xp: { result = Checks.Installed.Rmxp; break; }
+                    case RPGMakerVersion.Vx: { result = Checks.Installed.Rmvx; break; }
+                    case RPGMakerVersion.VxAce: { result = Checks.Installed.RmvxAce; break; }
                     default: { result = false; break; }
                 }
 
-                return result ? installed : not_installed;
+                return result ? installed : notInstalled;
             }
 
             public static string GetVersion(string input)
             {
                 if (input == "") return null;
 
-                RPGMakerVersion _version = RGSSAD.GetVersion(input);
+                RPGMakerVersion version = RGSSAD.GetVersion(input);
 
-                switch (_version)
+                switch (version)
                 {
                     case RPGMakerVersion.Xp: return "RPG Maker XP";
                     case RPGMakerVersion.Vx: return "RPG Maker VX";
                     case RPGMakerVersion.VxAce: return "RPG Maker VX Ace";
-                    case RPGMakerVersion.Invalid:
                     default:
                         return null;
                 }
@@ -187,7 +180,7 @@ namespace rpg_patcher
             public static void ExecuteIfProjectSelected(Action callback)
             {
                 try {
-                    if ((Program.ProjectPath ?? RNDString) != RNDString)
+                    if ((Program.ProjectPath ?? RndString) != RndString)
                     {
                         callback();
                     }
@@ -197,14 +190,14 @@ namespace rpg_patcher
                 }
             }
 
-            public static class RPGMaker2k {
+            public static class RpgMaker2K {
 
-                public static void Convert2kCharsets(string pathToCharsets, string output)
+                public static void Convert2KCharsets(string pathToCharsets, string output)
                 {
                     RPGMaker2000CharsetConverter converter = new RPGMaker2000CharsetConverter();
 
-                    List<string> allCharsets = Directory.EnumerateFiles(pathToCharsets).ToList<string>();
-                    List<RM2k2XP.Converters.Formats.RPGMakerXPCharset> results;
+                    List<string> allCharsets = Directory.EnumerateFiles(pathToCharsets).ToList();
+                    List<RPGMakerXPCharset> results;
                     int i;
                     string outfile;
 
@@ -218,15 +211,15 @@ namespace rpg_patcher
                         }
                     }
 
-                    Operation.OperationCompleted();
+                    OperationCompleted();
                 }
 
-                public static void Convert2kChipsets(string pathToChipsets, string output)
+                public static void Convert2KChipsets(string pathToChipsets, string output)
                 {
                     RPGMaker2000ChipsetConverter converter = new RPGMaker2000ChipsetConverter();
 
-                    List<string> allChipsets = Directory.EnumerateFiles(pathToChipsets).ToList<string>();
-                    RM2k2XP.Converters.Formats.RPGMakerXPTileset results;
+                    List<string> allChipsets = Directory.EnumerateFiles(pathToChipsets).ToList();
+                    RPGMakerXPTileset results;
 
                     foreach (string filename in allChipsets)
                     {
@@ -234,7 +227,7 @@ namespace rpg_patcher
                         results.SaveAll($"{Path.GetFileNameWithoutExtension(filename)}", $"{output}\\");
                     }
 
-                    Operation.OperationCompleted();
+                    OperationCompleted();
                 }
             }
         }
@@ -245,12 +238,12 @@ namespace rpg_patcher
             {
                 try
                 {
-                    Functions.Operation.ExecuteIfProjectSelected(() =>
+                    Operation.ExecuteIfProjectSelected(() =>
                     {
-                        FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () =>
+                        FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new[] { Path.GetExtension(Program.ProjectPath) }, () =>
                         {
-                            Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
-                            ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
+                            Misc.EnsurePathExists(FileDialog.SaveDialog.DirectoryPath.ToString());
+                            ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog.SaveDialog.DirectoryPath.ToString());
 
                             if (!ignoreComplete) Operation.OperationCompleted();
                         });
@@ -266,9 +259,9 @@ namespace rpg_patcher
             {
                 try
                 {
-                    Functions.Operation.ExecuteIfProjectSelected(() => {
-                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
-                        ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog._SaveDialog.DirectoryPath.ToString());
+                    Operation.ExecuteIfProjectSelected(() => {
+                        Misc.EnsurePathExists(FileDialog.SaveDialog.DirectoryPath.ToString());
+                        ProjectGenerator.GenerateProject(RGSSAD.GetVersion(Program.ProjectPath), FileDialog.SaveDialog.DirectoryPath.ToString());
 
                         if (!ignoreComplete) Operation.OperationCompleted();
                     });
@@ -283,9 +276,9 @@ namespace rpg_patcher
             {
                 try
                 {
-                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { Path.GetExtension(Program.ProjectPath) }, () => {
-                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
-                        ProjectGenerator.GenerateProject(type, FileDialog._SaveDialog.DirectoryPath.ToString());
+                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new[] { Path.GetExtension(Program.ProjectPath) }, () => {
+                        Misc.EnsurePathExists(FileDialog.SaveDialog.DirectoryPath.ToString());
+                        ProjectGenerator.GenerateProject(type, FileDialog.SaveDialog.DirectoryPath.ToString());
 
                         if (!ignoreComplete) Operation.OperationCompleted();
                     });
@@ -296,13 +289,13 @@ namespace rpg_patcher
                 }
             }
 
-            public static void MakeMVProject(bool ignoreComplete = false)
+            public static void MakeMvProject(bool ignoreComplete = false)
             {
                 try
                 {
-                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new string[] { "Game.rpgproject" }, () => {
-                        Misc.EnsurePathExists(FileDialog._SaveDialog.DirectoryPath.ToString());
-                        File.WriteAllText(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\Game.rpgproject", "RPGMV 1.6.2");
+                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new[] { "Game.rpgproject" }, () => {
+                        Misc.EnsurePathExists(FileDialog.SaveDialog.DirectoryPath.ToString());
+                        File.WriteAllText(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\Game.rpgproject", "RPGMV 1.6.2");
 
                         if (!ignoreComplete) Operation.OperationCompleted();
                     });
@@ -316,14 +309,14 @@ namespace rpg_patcher
 
         public class Extract
         {
-            public Label infoLabel;
-            public static int    location =     0;
-            public static int    max =          1;
+            public Label InfoLabel;
+            public static int    Location;
+            public static int    Max =          1;
             public Window AllFiles =     new Window("Archived files");
-            public Button quitAllFiles;
-            public Button allFilesNext;
-            public Button allFilesLast;
-            public static List<string> files =  new List<string>();
+            public Button QuitAllFiles;
+            public Button AllFilesNext;
+            public Button AllFilesLast;
+            public static List<string> Files =  new List<string>();
 
             public Extract() => Init();
 
@@ -339,17 +332,17 @@ namespace rpg_patcher
 
                 SetupElements();
 
-                AllFiles.Add(infoLabel);
-                AllFiles.Add(allFilesNext);
-                AllFiles.Add(allFilesLast);
-                AllFiles.Add(quitAllFiles);
+                AllFiles.Add(InfoLabel);
+                AllFiles.Add(AllFilesNext);
+                AllFiles.Add(AllFilesLast);
+                AllFiles.Add(QuitAllFiles);
 
                 return this;
             }
 
             public void SetupElements()
             {
-                infoLabel = new Label()
+                InfoLabel = new Label
                 {
                     X = 1,
                     Y = 0,
@@ -357,26 +350,26 @@ namespace rpg_patcher
                     Height = Dim.Fill(3)
                 };
 
-                quitAllFiles = new Button("Close", true)
+                QuitAllFiles = new Button("Close", true)
                 {
                     X = Pos.Center(),
                     Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
-                quitAllFiles.Clicked += () => { location = 0; StaticWindows.Main._window.SetFocus(); Application.RequestStop(); };
+                QuitAllFiles.Clicked += () => { Location = 0; StaticWindows.Main.Window.SetFocus(); Application.RequestStop(); };
 
-                allFilesNext = new Button("Next", true)
+                AllFilesNext = new Button("Next", true)
                 {
                     X = Pos.Center() + 7,
                     Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
-                allFilesNext.Clicked += () => { location = (location + 1) % max; GetAllFiles(this); };
+                AllFilesNext.Clicked += () => { Location = (Location + 1) % Max; GetAllFiles(this); };
 
-                allFilesLast = new Button("Last", true)
+                AllFilesLast = new Button("Last", true)
                 {
                     X = Pos.Center() - 18,
                     Y = Pos.Bottom(AllFiles) - Pos.Y(AllFiles) - 3
                 };
-                allFilesLast.Clicked += () => { location = (location + max - 1) % max; GetAllFiles(this); };
+                AllFilesLast.Clicked += () => { Location = (Location + Max - 1) % Max; GetAllFiles(this); };
             }
 
             public const int MaxNamesOnDisplay = 15;
@@ -389,16 +382,16 @@ namespace rpg_patcher
                 //WaitDialog.Width = 15;
                 //WaitDialog.Height = 3;
 
-                RPGMakerVersion _version = RGSSAD.GetVersion(path);
+                RPGMakerVersion version = RGSSAD.GetVersion(path);
 
-                switch (_version)
+                switch (version)
                 {
                     case RPGMakerVersion.Xp:
                     case RPGMakerVersion.Vx:
                         {
                             RGSSADv1 encrypted = new RGSSADv1(path);
 
-                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
+                            Max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
                             int size = 0;
 
                             foreach (ArchivedFile file in encrypted.ArchivedFiles)
@@ -408,12 +401,12 @@ namespace rpg_patcher
 
                             infoText = "Amount of files: " + encrypted.ArchivedFiles.Count + " (" + Misc.FileSize(size) + " total)\n\n";
 
-                            for (int q = location * MaxNamesOnDisplay; q < Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
+                            for (int q = Location * MaxNamesOnDisplay; q < Math.Min((Location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
                             {
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
 
-                            Misc.UpdateStatus("Displaying files " + (location * MaxNamesOnDisplay + 1) + " thru " + Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count.ToString());
+                            Misc.UpdateStatus("Displaying files " + (Location * MaxNamesOnDisplay + 1) + " thru " + Math.Min((Location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count) + " out of " + encrypted.ArchivedFiles.Count);
 
                             encrypted.Dispose();
                             break;
@@ -422,7 +415,7 @@ namespace rpg_patcher
                         {
                             RGSSADv3 encrypted = new RGSSADv3(path);
 
-                            max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
+                            Max = (int)Math.Ceiling((double)encrypted.ArchivedFiles.Count / MaxNamesOnDisplay);
                             int size = 0;
 
                             foreach (ArchivedFile file in encrypted.ArchivedFiles)
@@ -432,7 +425,7 @@ namespace rpg_patcher
 
                             infoText = "Amount of files: " + encrypted.ArchivedFiles.Count + " (" + Misc.FileSize(size) + " total)\n\n";
 
-                            for (int q = location * MaxNamesOnDisplay; q < Math.Min((location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
+                            for (int q = Location * MaxNamesOnDisplay; q < Math.Min((Location + 1) * MaxNamesOnDisplay, encrypted.ArchivedFiles.Count); q++)
                             {
                                 infoText += (encrypted.ArchivedFiles[q].Name).Substring(0, Math.Min(58 - Misc.FileSize(encrypted.ArchivedFiles[q].Size).Length, encrypted.ArchivedFiles[q].Name.Length)) + " (" + Misc.FileSize(encrypted.ArchivedFiles[q].Size) + ")" + "\n";
                             }
@@ -440,37 +433,36 @@ namespace rpg_patcher
                             encrypted.Dispose();
                             break;
                         }
-                    default: break;
                 }
 
-                infoText += $"\n{location + 1} / {max}";
+                infoText += $"\n{Location + 1} / {Max}";
 
                 if (useExtractObj == null)
                 {
                     Extract extractWin = new Extract();
 
-                    extractWin.infoLabel.Text = infoText;
+                    extractWin.InfoLabel.Text = infoText;
 
                     extractWin.AllFiles.ColorScheme = Style.ArchivedList;
                     Application.Run(extractWin.AllFiles);
                 }
                 else
                 {
-                    useExtractObj.infoLabel.Text = infoText;
+                    useExtractObj.InfoLabel.Text = infoText;
                 }
             }
 
             public static void ExtractAllFiles(bool ignoreComplete = false)
             {
                 string path = Program.ProjectPath;
-                string where = Functions.FileDialog._SaveDialog.DirectoryPath.ToString();
+                string where = FileDialog.SaveDialog.DirectoryPath.ToString();
 
                 //WaitDialog.Width = 15;
                 //WaitDialog.Height = 3;
 
-                RPGMakerVersion _version = RGSSAD.GetVersion(path);
+                RPGMakerVersion version = RGSSAD.GetVersion(path);
 
-                switch (_version)
+                switch (version)
                 {
                     case RPGMakerVersion.Xp:
                     case RPGMakerVersion.Vx:
@@ -503,7 +495,6 @@ namespace rpg_patcher
                             encrypted.Dispose();
                             break;
                         }
-                    default: break;
                 }
 
                 if (!ignoreComplete) Operation.OperationCompleted();
@@ -516,17 +507,17 @@ namespace rpg_patcher
                 string path = Path.GetDirectoryName(Program.ProjectPath);
                 if (!path.EndsWith('\\')) path += "\\";
 
-                files = Directory.GetFiles(path)
+                Files = Directory.GetFiles(path)
                     .Where(x => !x.Contains("rgssad"))
                     .Where(x => !x.Contains("rgss2a"))
                     .Where(x => !x.Contains("rgss3a"))
                     .ToList();
 
-                FileDialog.CreateSaveDialog("Copy to...", "Pick a place", new string[] { "rgssad", "rgss2a", "rgss3a" }, () => { return; });
+                FileDialog.CreateSaveDialog("Copy to...", "Pick a place", new[] { "rgssad", "rgss2a", "rgss3a" }, () => { });
 
-                if (!Directory.Exists(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\")) Directory.CreateDirectory(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\");
+                if (!Directory.Exists(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\")) Directory.CreateDirectory(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\");
 
-                Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\"));
+                Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\"));
 
                 if (!ignoreComplete) Operation.OperationCompleted();
             }
@@ -538,15 +529,15 @@ namespace rpg_patcher
                 string path = Path.GetDirectoryName(Program.ProjectPath);
                 if (!path.EndsWith('\\')) path += "\\";
 
-                files = Directory.GetFiles(path)
+                Files = Directory.GetFiles(path)
                     .Where(x => !x.Contains("rgssad"))
                     .Where(x => !x.Contains("rgss2a"))
                     .Where(x => !x.Contains("rgss3a"))
                     .ToList();
 
-                if (!Directory.Exists(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\")) Directory.CreateDirectory(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\");
+                if (!Directory.Exists(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\")) Directory.CreateDirectory(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\");
 
-                Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog._SaveDialog.DirectoryPath.ToString() + "\\"));
+                Misc.CopyAll(new DirectoryInfo(path), new DirectoryInfo(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\"));
 
                 if (!ignoreComplete) Operation.OperationCompleted();
             }
@@ -554,17 +545,17 @@ namespace rpg_patcher
             public static void FindAndExtractFile(bool ignoreComplete = false)
             {
                 string path = Program.ProjectPath;
-                string where = Functions.FileDialog._SaveDialog.DirectoryPath.ToString();
+                string where = FileDialog.SaveDialog.DirectoryPath.ToString();
                 string file = new StaticWindows.ExportOneFile().GetFile();
 
                 //WaitDialog.Width = 15;
                 //WaitDialog.Height = 3;
 
-                Functions.Misc.UpdateStatus("Extracting file: " + file);
+                Misc.UpdateStatus("Extracting file: " + file);
 
-                RPGMakerVersion _version = RGSSAD.GetVersion(path);
+                RPGMakerVersion version = RGSSAD.GetVersion(path);
 
-                switch (_version)
+                switch (version)
                 {
                     case RPGMakerVersion.Xp:
                     case RPGMakerVersion.Vx:
@@ -572,16 +563,16 @@ namespace rpg_patcher
                             RGSSADv1 encrypted = new RGSSADv1(path);
                             try
                             {
-                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
+                                ArchivedFile result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
 
-                                if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
+                                if ((result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, Settings.Values.OverwriteFiles);
+                                    encrypted.ExtractFile(result, where, Settings.Values.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
                                 {
-                                    Functions.Misc.UpdateStatus("Extracted file: " + file);
+                                    Misc.UpdateStatus("Extracted file: " + file);
                                     Operation.OperationCompleted();
                                 }
                             }
@@ -597,16 +588,16 @@ namespace rpg_patcher
                             RGSSADv3 encrypted = new RGSSADv3(path);
                             try
                             {
-                                ArchivedFile _result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
+                                ArchivedFile result = encrypted.ArchivedFiles.FirstOrDefault(x => x.Name.Contains(file));
 
-                                if ((_result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
+                                if ((result.Name ?? "TheresNoFileHere") != "TheresNoFileHere")
                                 {
-                                    encrypted.ExtractFile(_result, where, Settings.Values.OverwriteFiles);
+                                    encrypted.ExtractFile(result, where, Settings.Values.OverwriteFiles);
                                 }
 
                                 if (!ignoreComplete)
                                 {
-                                    Functions.Misc.UpdateStatus("Extracted file: " + file);
+                                    Misc.UpdateStatus("Extracted file: " + file);
                                     Operation.OperationCompleted();
                                 }
                             }
@@ -617,57 +608,56 @@ namespace rpg_patcher
                             encrypted.Dispose();
                             break;
                         }
-                    default: break;
                 }
             }
         }
 
         public static class FileDialog
         {
-            public static OpenDialog _OpenDialog = new OpenDialog("Not Supplied", "Not Supplied");
-            public static SaveDialog _SaveDialog = new SaveDialog("Not Supplied", "Not Supplied");
+            public static OpenDialog OpenDialog = new OpenDialog("Not Supplied", "Not Supplied");
+            public static SaveDialog SaveDialog = new SaveDialog("Not Supplied", "Not Supplied");
 
-            public static void CreateOpenDialog(string title, string message, string[] allowed_file_types, Action callback)
+            public static void CreateOpenDialog(string title, string message, string[] allowedFileTypes, Action callback)
             {
-                _OpenDialog = new OpenDialog(title, message);
-                _OpenDialog.Id = "OpenFileDialog";
+                OpenDialog = new OpenDialog(title, message);
+                OpenDialog.Id = "OpenFileDialog";
 
-                _OpenDialog.X = Pos.Center();
-                _OpenDialog.Y = Pos.Center();
-                _OpenDialog.ColorScheme = Colors.Dialog;
+                OpenDialog.X = Pos.Center();
+                OpenDialog.Y = Pos.Center();
+                OpenDialog.ColorScheme = Colors.Dialog;
 
-                _OpenDialog.AllowedFileTypes = allowed_file_types;
+                OpenDialog.AllowedFileTypes = allowedFileTypes;
 
                 var setdir = new Button("Set Dir...");
-                setdir.Clicked += () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
-                _OpenDialog.AddButton(setdir);
+                setdir.Clicked += () => { try { OpenDialog.DirectoryPath = OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
+                OpenDialog.AddButton(setdir);
 
-                (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Open") as Button).Clicked += callback;
-                (_OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
+                (OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Open") as Button).Clicked += callback;
+                (OpenDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
 
-                Application.Run(_OpenDialog);
+                Application.Run(OpenDialog);
             }
 
-            public static void CreateSaveDialog(string title, string message, string[] allowed_file_types, Action callback)
+            public static void CreateSaveDialog(string title, string message, string[] allowedFileTypes, Action callback)
             {
-                _SaveDialog = new SaveDialog(title, message);
-                _SaveDialog.Id = "SaveFileDialog";
+                SaveDialog = new SaveDialog(title, message);
+                SaveDialog.Id = "SaveFileDialog";
 
-                _SaveDialog.X = Pos.Center();
-                _SaveDialog.Y = Pos.Center();
-                _SaveDialog.ColorScheme = Colors.Dialog;
+                SaveDialog.X = Pos.Center();
+                SaveDialog.Y = Pos.Center();
+                SaveDialog.ColorScheme = Colors.Dialog;
 
-                _SaveDialog.AllowedFileTypes = allowed_file_types;
+                SaveDialog.AllowedFileTypes = allowedFileTypes;
 
                 var setdir = new Button("Set Dir...");
-                setdir.Clicked += () => { try { _OpenDialog.DirectoryPath = _OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
-                _OpenDialog.AddButton(setdir);
+                setdir.Clicked += () => { try { OpenDialog.DirectoryPath = OpenDialog.DirectoryPath; } catch (Exception) { /* nothing */ } };
+                OpenDialog.AddButton(setdir);
 
-                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += () => callback();
+                (SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Save") as Button).Clicked += () => callback();
 
-                (_SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
+                (SaveDialog.Subviews.First().Subviews.FirstOrDefault(x => (x as Button ?? new Button("x")).Text == "Cancel") as Button).Clicked += () => Application.Top.MostFocused.SetFocus();
 
-                Application.Run(_SaveDialog);
+                Application.Run(SaveDialog);
             }
         }
 
@@ -679,20 +669,19 @@ namespace rpg_patcher
                 {
                     // kilobytes/megabytes
                     case 1:
+                    {
+                        if (bytes < 1000)
                         {
-                            if (bytes < 1000)
-                            {
-                                return bytes.ToString() + " bytes";
-                            }
-                            else if (bytes > 1000 && bytes < 1000000)
-                            {
-                                return (Math.Floor(bytes / 10.0) / 100).ToString() + " KB";
-                            }
-                            else
-                            {
-                                return (Math.Floor(bytes / 10000.0) / 100).ToString() + " MB";
-                            }
+                            return bytes + " bytes";
                         }
+
+                        if (bytes > 1000 && bytes < 1000000)
+                        {
+                            return (Math.Floor(bytes / 10.0) / 100) + " KB";
+                        }
+
+                        return (Math.Floor(bytes / 10000.0) / 100) + " MB";
+                    }
 
                     // just bytes
                     case 2:
@@ -703,20 +692,19 @@ namespace rpg_patcher
                     // kibibytes/mebibytes
                     case 0:
                     default:
+                    {
+                        if (bytes < 1024)
                         {
-                            if (bytes < 1024)
-                            {
-                                return bytes.ToString() + " bytes";
-                            }
-                            else if (bytes > 1024 && bytes < 1048576)
-                            {
-                                return (Math.Floor(bytes / 10.24) / 100).ToString() + " KiB";
-                            }
-                            else
-                            {
-                                return (Math.Floor(bytes / 10485.76) / 100).ToString() + " MiB";
-                            }
+                            return bytes + " bytes";
                         }
+
+                        if (bytes > 1024 && bytes < 1048576)
+                        {
+                            return (Math.Floor(bytes / 10.24) / 100) + " KiB";
+                        }
+
+                        return (Math.Floor(bytes / 10485.76) / 100) + " MiB";
+                    }
                 }
             }
 

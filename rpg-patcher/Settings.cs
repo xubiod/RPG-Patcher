@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using Terminal.Gui;
-using System.Threading.Tasks;
 
 namespace rpg_patcher
 {
@@ -14,7 +10,7 @@ namespace rpg_patcher
             public static int BytePref;
             public static int Theme;
             public static bool OverwriteFiles = true;
-            public static bool PersistentProject = false;
+            public static bool PersistentProject;
 
             public static int Count = 4;
         }
@@ -64,10 +60,7 @@ namespace rpg_patcher
             {
                 Save(filename);
                 Load(filename);
-                return;
             }
-
-            return;
         }
     }
 }

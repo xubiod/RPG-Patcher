@@ -1,15 +1,12 @@
-﻿using RPGMakerDecrypter.Decrypter;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NStack;
+using RPGMakerDecrypter.Decrypter;
 using Terminal.Gui;
 
 namespace rpg_patcher
 {
-    static class StaticWindows
+    internal static class StaticWindows
     {
         public static class Globals
         {
@@ -20,88 +17,88 @@ namespace rpg_patcher
         {
             public About() => Init();
 
-            public Window _window = new Window("About");
+            public Window Window = new Window("About");
 
             public Window Init()
             {
-                _window.X = Pos.Center();
-                _window.Y = Pos.Center();
+                Window.X = Pos.Center();
+                Window.Y = Pos.Center();
 
                 SetupElements();
 
-                _window.Width = content.Width + 4;
-                _window.Height = content.Height + 5;
+                Window.Width = _content.Width + 4;
+                Window.Height = _content.Height + 5;
 
-                _window.Add(content);
-                _window.Add(quit);
+                Window.Add(_content);
+                Window.Add(_quit);
 
                 // _window.ColorScheme = Application.Top.ColorScheme;
 
-                return _window;
+                return Window;
             }
 
             private void SetupElements()
             {
-                content = new Label($"RPG Patcher (patch {ThisAssembly.Git.Commit})\n\nDeveloped by xubiod 2019-2021\n\nFor full external resource credit, please visit the repo page.\n{ThisAssembly.Git.RepositoryUrl}")
+                _content = new Label($"RPG Patcher (patch {ThisAssembly.Git.Commit})\n\nDeveloped by xubiod 2019-2021\n\nFor full external resource credit, please visit the repo page.\n{ThisAssembly.Git.RepositoryUrl}")
                 {
                     X = Pos.Center(),
                     Y = Pos.Center()
                 };
 
-                quit = new Button("Close", true)
+                _quit = new Button("Close", true)
                 {
                     X = Pos.Center(),
-                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                    Y = Pos.Bottom(Window) - Pos.Y(Window) - 3
                 };
 
-                quit.Clicked += () => { Main._window.SetFocus(); Application.RequestStop(); };
+                _quit.Clicked += () => { Main.Window.SetFocus(); Application.RequestStop(); };
             }
 
             public void RefreshColors()
             {
-                _window.ColorScheme = Colors.Base;
+                Window.ColorScheme = Colors.Base;
             }
 
-            private Label content;
+            private Label _content;
 
-            private Button quit;
+            private Button _quit;
         }
 
         public static class Main
         {
-            public static Window _window = new Window("RPG Patcher");
+            public static Window Window = new Window("RPG Patcher");
 
             public static Window Init()
             {
-                _window.X = 0;
-                _window.Y = 1;
-                _window.Width = Dim.Fill();
-                _window.Height = Dim.Fill();
+                Window.X = 0;
+                Window.Y = 1;
+                Window.Width = Dim.Fill();
+                Window.Height = Dim.Fill();
 
                 SetupElements();
 
-                _window.Add(_contents.ToArray());
+                Window.Add(Contents.ToArray());
 
-                return _window;
+                return Window;
             }
 
             private static void SetupElements()
             {
-                (_contents[0] as Button).Clicked += () => Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new string[] { Constants.RpgMakerXpArchiveName, Constants.RpgMakerVxArchiveName, Constants.RpgMakerVxAceArchiveName }, () => Program.UpdateElements());
-                (_contents[4] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles());
-                (_contents[6] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles());
-                (_contents[8] as Button).Clicked += () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
-                (_contents[10] as Button).Clicked += () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); };
+                (Contents[0] as Button).Clicked += () => Functions.FileDialog.CreateOpenDialog("Project", "Pick a project", new[] { Constants.RpgMakerXpArchiveName, Constants.RpgMakerVxArchiveName, Constants.RpgMakerVxAceArchiveName }, () => Program.UpdateElements());
+                (Contents[4] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.GetAllFiles());
+                (Contents[6] as Button).Clicked += () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.CopyGameFiles());
+                (Contents[8] as Button).Clicked += () => Functions.FileDialog.CreateSaveDialog("Project", "Pick a project", new[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.ExtractAllFiles()));
+                (Contents[10] as Button).Clicked += () => { Functions.Operation.ExecuteIfProjectSelected(() => Functions.Project.MakeProject()); };
             }
 
             public static void RefreshColors()
             {
-                _window.ColorScheme = Colors.Base;
+                Window.ColorScheme = Colors.Base;
 
-                if (_window.Subviews.First().Subviews.Count != 0) _window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString").ColorScheme = Style.HighlighedLabel;
+                if (Window.Subviews.First().Subviews.Count != 0) Window.Subviews.First().Subviews.FirstOrDefault(x => x.Id == "ProjectString").ColorScheme = Style.HighlighedLabel;
             }
 
-            static List<View> _contents = new List<View>()
+            private static readonly List<View> Contents = new List<View>
             {
                 new Button("Load", true)
                 {
@@ -176,137 +173,137 @@ namespace rpg_patcher
 
         public class Settings
         {
-            public Window _window = new Window("Settings");
+            public Window Window = new Window("Settings");
 
             public Settings() => Init();
 
             public Window Init()
             {
-                _window.Width = Dim.Percent(50);
-                _window.Height = Dim.Percent(80);
+                Window.Width = Dim.Percent(50);
+                Window.Height = Dim.Percent(80);
 
-                _window.X = Pos.Center();
-                _window.Y = Pos.Center();
+                Window.X = Pos.Center();
+                Window.Y = Pos.Center();
 
                 SetupElements();
 
-                _window.Add(scrollBarView);
-                _window.Add(quit);
+                Window.Add(_scrollBarView);
+                Window.Add(_quit);
 
-                return _window;
+                return Window;
             }
 
             private void SetupElements()
             {
-                (content[1] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.BytePref;
-                (content[3] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.OverwriteFiles ? 0 : 1;
-                (content[5] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.PersistentProject ? 1 : 0;
-                (content[7] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.Theme;
+                (Content[1] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.BytePref;
+                (Content[3] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.OverwriteFiles ? 0 : 1;
+                (Content[5] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.PersistentProject ? 1 : 0;
+                (Content[7] as RadioGroup).SelectedItem = rpg_patcher.Settings.Values.Theme;
 
-                (content[1] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.BytePref = x.SelectedItem; };
-                (content[3] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.OverwriteFiles = x.SelectedItem == 0; };
-                (content[5] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { rpg_patcher.Settings.Values.PersistentProject = x.SelectedItem == 1; };
-                (content[7] as RadioGroup).SelectedItemChanged += (RadioGroup.SelectedItemChangedArgs x) => { Style.Theme(x.SelectedItem); RefreshColors(); };
+                (Content[1] as RadioGroup).SelectedItemChanged += x => { rpg_patcher.Settings.Values.BytePref = x.SelectedItem; };
+                (Content[3] as RadioGroup).SelectedItemChanged += x => { rpg_patcher.Settings.Values.OverwriteFiles = x.SelectedItem == 0; };
+                (Content[5] as RadioGroup).SelectedItemChanged += x => { rpg_patcher.Settings.Values.PersistentProject = x.SelectedItem == 1; };
+                (Content[7] as RadioGroup).SelectedItemChanged += x => { Style.Theme(x.SelectedItem); RefreshColors(); };
 
-                quit = new Button("Close", true)
+                _quit = new Button("Close", true)
                 {
                     X = Pos.Center(),
-                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                    Y = Pos.Bottom(Window) - Pos.Y(Window) - 3
                 };
 
-                quit.Clicked += () => { rpg_patcher.Settings.Save("settings"); Main._window.SetFocus(); Application.RequestStop(); };
+                _quit.Clicked += () => { rpg_patcher.Settings.Save("settings"); Main.Window.SetFocus(); Application.RequestStop(); };
 
-                scrollBarView.X = 0;
-                scrollBarView.Y = 0;
+                _scrollBarView.X = 0;
+                _scrollBarView.Y = 0;
 
-                scrollBarView.ContentSize = new Size(40, 30);
+                _scrollBarView.ContentSize = new Size(40, 30);
 
-                scrollBarView.Width = Dim.Fill();
-                scrollBarView.Height = Dim.Fill(3);
+                _scrollBarView.Width = Dim.Fill();
+                _scrollBarView.Height = Dim.Fill(3);
 
-                scrollBarView.Add(content);
+                _scrollBarView.Add(Content);
             }
 
             public void RefreshColors()
             {
-                _window.ColorScheme = Colors.Base;
+                Window.ColorScheme = Colors.Base;
                 Application.Refresh();
             }
 
             public int BytePref = 0;
             public bool OverwriteFiles = true;
 
-            static View[] content = {
+            private static readonly View[] Content = {
                 new Label(1, 0, "Byte Representation"),
 
-                new RadioGroup(2, 1, new NStack.ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}, 0),
+                new RadioGroup(2, 1, new ustring[] {"Kibibyte/Mebibyte (Windows Default)", "Kilobyte/Megabyte", "Only bytes"}),
 
                 new Label(1, 5, "File Behaviour"),
 
-                new RadioGroup(2, 6, new NStack.ustring[] {"Always Overwrite (Default)", "Do not overwrite"}, 0),
+                new RadioGroup(2, 6, new ustring[] {"Always Overwrite (Default)", "Do not overwrite"}),
 
                 new Label(1, 9, "Store last used project"),
 
-                new RadioGroup(2, 10, new NStack.ustring[] {"No (Default)", "Yes"}, 0),
+                new RadioGroup(2, 10, new ustring[] {"No (Default)", "Yes"}),
 
                 new Label(1, 13, "Theme"),
 
-                new RadioGroup(2, 14, Style.ThemeNamesAsUstringArray(), 0)
+                new RadioGroup(2, 14, Style.ThemeNamesAsUstringArray())
             };
 
-            Button quit;
-            ScrollView scrollBarView = new ScrollView();
+            private Button _quit;
+            private readonly ScrollView _scrollBarView = new ScrollView();
         }
 
         public class ExportOneFile
         {
-            public Window _window = new Window("Export One File");
+            public Window Window = new Window("Export One File");
 
             public ExportOneFile() => Init();
             public Window Init()
             {
-                _window.Add(content);
-                _window.Width = Dim.Sized(52);
-                _window.Height = Dim.Sized(8);
+                Window.Add(Content);
+                Window.Width = Dim.Sized(52);
+                Window.Height = Dim.Sized(8);
 
-                _window.X = Pos.Center();
-                _window.Y = Pos.Center();
+                Window.X = Pos.Center();
+                Window.Y = Pos.Center();
 
                 SetupElements();
 
-                _window.Add(save, quit);
+                Window.Add(Save, _quit);
 
-                return _window;
+                return Window;
             }
 
             private void SetupElements()
             {
-                save.Clicked += () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new string[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()));
+                Save.Clicked += () => Functions.FileDialog.CreateSaveDialog("Place", "Pick a place", new[] { "" }, () => Functions.Operation.ExecuteIfProjectSelected(() => Functions.Extract.FindAndExtractFile()));
 
-                quit = new Button("Close", true)
+                _quit = new Button("Close", true)
                 {
                     X = Pos.Center(),
-                    Y = Pos.Bottom(_window) - Pos.Y(_window) - 3
+                    Y = Pos.Bottom(Window) - Pos.Y(Window) - 3
                 };
 
-                quit.Clicked += () => { GetFile(); Main._window.SetFocus(); Application.RequestStop(); };
+                _quit.Clicked += () => { GetFile(); Main.Window.SetFocus(); Application.RequestStop(); };
             }
 
             public void RefreshColors()
             {
-                _window.ColorScheme = Colors.Base;
+                Window.ColorScheme = Colors.Base;
             }
 
             public string GetFile()
             {
-                Globals.ExportOneFileGet = (_window.Subviews.First().Subviews.FirstOrDefault(x => (x as TextField ?? new TextField("x")).Id == "FileToExport") as TextField).Text.ToString();
+                Globals.ExportOneFileGet = (Window.Subviews.First().Subviews.FirstOrDefault(x => (x as TextField ?? new TextField("x")).Id == "FileToExport") as TextField).Text.ToString();
                 return Globals.ExportOneFileGet;
             }
 
             public int BytePref = 0;
             public bool OverwriteFiles = true;
 
-            static View[] content = {
+            private static readonly View[] Content = {
                 new Label(1, 1, "File from Archive (list directory!)"),
 
                 new TextField(1, 2, 48, "")
@@ -315,13 +312,13 @@ namespace rpg_patcher
                 }
             };
 
-            static Button save = new Button("Export")
+            private static readonly Button Save = new Button("Export")
             {
                 X = Pos.At(1),
                 Y = Pos.At(4)
             };
 
-            static Button quit;
+            private static Button _quit;
         }
     }
 }
