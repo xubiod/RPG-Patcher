@@ -105,7 +105,7 @@ namespace rpg_patcher
                     X = Pos.At(2),
                     Y = Pos.At(2)
                 },
-                new Label("Loads an RPG Maker project.")
+                new Label("Loads an (pre-MV) RPG Maker project.")
                 {
                     X = Pos.At(16),
                     Y = Pos.At(2)
@@ -128,7 +128,7 @@ namespace rpg_patcher
                     X = Pos.At(3),
                     Y = Pos.At(9)
                 },
-                new Label("Lists infromation about the archive.")
+                new Label("Lists information about the archive.")
                 {
                     X = Pos.At(23),
                     Y = Pos.At(9)
