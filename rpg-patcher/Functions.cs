@@ -305,6 +305,23 @@ namespace rpg_patcher
                     Application.RequestStop(); Operation.ShowError(ex.Message);
                 }
             }
+
+            public static void MakeMzProject(bool ignoreComplete = false)
+            {
+                try
+                {
+                    FileDialog.CreateSaveDialog("Project File", "Pick a directory.", new[] { "game.rmmzproject" }, () => {
+                        Misc.EnsurePathExists(FileDialog.SaveDialog.DirectoryPath.ToString());
+                        File.WriteAllText(FileDialog.SaveDialog.DirectoryPath.ToString() + "\\game.rmmzproject", "RPGMZ 1.4.3");
+
+                        if (!ignoreComplete) Operation.OperationCompleted();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Application.RequestStop(); Operation.ShowError(ex.Message);
+                }
+            }
         }
 
         public class Extract

@@ -75,6 +75,9 @@ namespace rpg_patcher
                     }),
                     new MenuItem ("Create _MV project files", "", () => {
                         Functions.Project.MakeMvProject();
+                    }),
+                    new MenuItem ("Create M_Z project files", "", () => {
+                        Functions.Project.MakeMzProject();
                     })
                 }),
 
@@ -121,11 +124,11 @@ namespace rpg_patcher
                         Dialog installed = new Dialog("RPG Maker installs");
                         installed.AddButton(closeDialog); // \n\n
 
-                        installed.Add(new Label("RPG Maker 2000/2003 installed*:\nRPG Maker XP installed:\nRPG Maker VX installed:\nRPG Maker VX Ace installed:\nRPG Maker MV installed*:\nRPG Maker MZ installed**:"));
+                        installed.Add(new Label("RPG Maker 2000/2003 installed*:\nRPG Maker XP installed:\nRPG Maker VX installed:\nRPG Maker VX Ace installed:\nRPG Maker MV installed*:\nRPG Maker MZ installed*:"));
 
                         Label installedVersions = new Label($"{(Functions.Checks.Installed.Rm2K2003 ? "Yes" : "No")}\n{(Functions.Checks.Installed.Rmxp ? "Yes" : "No")}\n{(Functions.Checks.Installed.Rmvx ? "Yes" : "No")}\n{(Functions.Checks.Installed.RmvxAce ? "Yes" : "No")}\n{(Functions.Checks.Installed.Rmmv ? "Yes" : "No")}\n{(Functions.Checks.Installed.Rmmz ? "Yes" : "No")}") { TextAlignment = TextAlignment.Right, X = Pos.Right(installed) - Pos.X(installed) - 6 };
                         installed.Add(installedVersions);
-                        installed.Add(new Label("Installed or not, this program will not restrict use.\n\n*Functionality currently limited.\n**No RMMZ functionality available, as I don't own it.") { Y = Pos.Bottom(installedVersions) + 1 });
+                        installed.Add(new Label("Installed or not, this program will not restrict use.\n\n*Functionality currently limited.") { Y = Pos.Bottom(installedVersions) + 1 });
 
                         installed.Width = Dim.Percent(50);
                         installed.Height = Dim.Percent(47);
